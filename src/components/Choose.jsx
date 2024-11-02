@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import axios from 'axios'
 import { Input } from "@/components/ui/input"
 import exerciseService from '@/services/exercises.service'
 import workoutService from '@/services/workouts.service'
 
 function Choose( exercises= {}, userData = {}, isEditMode = false ) {
 
-    const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([])
+    const [selectedMuscleGroups, setSelectedMuscleGroups] = useState(['Core'])
     const [workoutName, setWorkoutName] = useState(isEditMode ? userData.name : '')
     const [step, setStep] = useState(1)
 
@@ -20,18 +19,34 @@ function Choose( exercises= {}, userData = {}, isEditMode = false ) {
 
     const handleSelection = (muscleGroupName) => {
 
-        console.log('How many', step)
-        console.log('musclegroup names: ', muscleGroupName)
-        
-        if (selectedMuscleGroups.includes(muscleGroupName)) {
-            setSelectedMuscleGroups(selectedMuscleGroups.filter(name => name !== muscleGroupName))
-        } else {
-            setSelectedMuscleGroups([...selectedMuscleGroups, muscleGroupName])
-            if (step < 3) {
-                setStep(step + 1)
+        let newSelectedGroups = [...selectedMuscleGroups]
+
+        if (muscleGroupName === 'Legs' || muscleGroupName === 'Back') {
+                
+            if (!newSelectedGroups.includes(muscleGroupName)) {
+                newSelectedGroups = ['Core', muscleGroupName]
             }
+            setStep(2)
+        } else {
+
+            const firstGroup = newSelectedGroups[0]
+            const secondGroup = newSelectedGroups.length > 1 ? newSelectedGroups[1] : null
+            if (secondGroup && ['Legs', 'Back'].includes(secondGroup)) {
+
+                if (newSelectedGroups.includes(muscleGroupName)) {
+                    newSelectedGroups = newSelectedGroups.filter(group => group !== muscleGroupName)
+                } else {
+                    if (muscleGroupName !== 'Core') {
+                        newSelectedGroups.push(muscleGroupName)
+                    }
+                }
+            }
+
+            if (newSelectedGroups.length >= 3) {
+                setStep(3)
+            }    
         }
-        console.log(selectedMuscleGroups)
+        setSelectedMuscleGroups(newSelectedGroups)
         
     }
 
@@ -40,7 +55,9 @@ function Choose( exercises= {}, userData = {}, isEditMode = false ) {
 
     const handleSubmit = async () => {
 
-        if (selectedMuscleGroups.length === 0) {
+        const isValidSelection = selectedMuscleGroups.length >= 2 && (selectedMuscleGroups[0] === 'Legs' || selectedMuscleGroups[0] === 'Back') && selectedMuscleGroups[selectedMuscleGroups.length - 1] === 'Core'
+        
+        if (!isValidSelection) {
             console.error('No Muscle groups selected.')
             return
         }
@@ -50,8 +67,10 @@ function Choose( exercises= {}, userData = {}, isEditMode = false ) {
             console.log('Submitting exercises', selectedMuscleGroups)
             
             const getExercisesByMuscleGroup = await exerciseService.getExercisesByMuscleGroups(selectedMuscleGroups)
-
+            console.log(getExercisesByMuscleGroup)
             const dataToBackend = { name: workoutName, exercises: getExercisesByMuscleGroup.data }
+
+            console.log(dataToBackend, isEditMode)
 
             if (isEditMode) {
 

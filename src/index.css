@@ -33,6 +33,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: darkkhaki;
 }
 
 h1 {
@@ -195,129 +196,95 @@ tr.done {
   background-color: #ecf0f1;
 }
 
-/* ALL EXERCISES PAGE */
 
-.exercises-on-display {
-  background-color: #2c3e50;
+/* HOME PAGE Styling  */
+
+.hidden-initial {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.img-card .overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.img-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.text-overlay {
+  position: absolute;
+  top: 25%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  z-index: 20;
+  transition: opacity 0.6s ease-out;
+}
+
+.text-content {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 1rem;
+  border-radius: 8px;
+  color: white;
+  text-align: center;
+}
+
+/* In-view class in HOME PAGE */
+.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.img-card.in-view img {
+  transform: scale(1.05); /* Slight zoom effect on image */
+}
+
+
+/* ALL EXERCISES VIEW */
+.card-container {
+  perspective: 1000px;
+  width: 250px;
   display: flex;
   flex-direction: row;
 }
 
-.exercise-card {
-  flex-grow: 1;
-  background-color: #2c3e50;
+.card {
   position: relative;
-  max-width: 400px;
-  height: 550px;
-  perspective: 1000px;
-  transform-style: preserve-3d;
-  transition: width 0.3s ease;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s;
 }
 
-.exercise-card:hover {
-  width: 450px;
-}
-
-.front, .back {
+.card-inner {
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
-  transition: transform 0.8s ease-in-out;
-  overflow: hidden;
-  transform-origin: left;
+  transform-style: preserve-3d;
 }
 
-.back {
+.card-front, .card-back {
+  backface-visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.card-back {
   transform: rotateY(180deg);
 }
 
-.card.show-back .front {
-  transform: rotateY(-180deg)
-}
-
-.card.show-back .back {
-  transform: rotateY(0deg)
-}
-
-.card.show-back .exercise-details {
-  display: none;
-}
-
-.exercise-image {
-  max-width: 100%;
-  object-fit: cover;
-  transition: opacity 0.5s ease;
-}
-
-.exercise-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  opacity: 0;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 0.5s ease;
-  overflow: hidden;
-}
-
-.exercise-card:hover .exercise-overlay {
-  opacity: 1;
-}
-
-.exercise-info {
-  width: 100%;
-  color: white;
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.exercise-card:hover .exercise-info {
-  opacity: 1;
-}
-
-.more-info {
-  margin-top: 10px;
-  cursor: pointer;
-}
-
-.full-description {
-  display: none;
-  position: absolute;
-  margin-top: 5px;
-  text-align: center;
-  font-style: italic;
-  font-size: 14px;
-  color: white;
-  width: 100%;
-  padding: 5px;
-}
-
-.extra-info {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  transition: transform 0.6s ease-in-out;
-  backface-visibility: hidden;
-  cursor: pointer;
-}
-
-.no-work p {
-  padding: 0 10px;
-  color: white;
-  text-shadow: 1px 1px 2px black;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 0.5fr);
 }

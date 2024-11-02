@@ -8,6 +8,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import workoutService from '@/services/workouts.service'
 
 function UserPage() {
 
@@ -46,6 +47,21 @@ function UserPage() {
 
     }, [view])
 
+    function handleDelete(oneWorkoutId) {
+      workoutService.deleteWorkout(oneWorkoutId)
+      .then(() => {
+
+        const deletedWorkoutIndex = allWorkouts.findIndex(workout => workout._id === oneWorkoutId)
+        allWorkouts.splice(deletedWorkoutIndex, 1)
+        setAllWorkouts([...allWorkouts])
+
+        toast.success('Workout deleted succesfully!')
+      })
+      .catch((error) => {
+        console.error('Error in deleting workout.', error)
+      })
+    }
+
   return (
     <div className="app-container">
     <aside className="sidebar">
@@ -63,6 +79,7 @@ function UserPage() {
               <th>Name</th>
               <th>Exercises</th>
               <th>Extras</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -78,15 +95,16 @@ function UserPage() {
                   <HoverCard>
                     <HoverCardTrigger asChild><button>Info</button></HoverCardTrigger>
                     <HoverCardContent>
-                      {oneWorkout.usedWith && oneWorkout.usedWith.map((oneItem) => {
-                        <div key={oneItem}>
-                          <p>If you like use with:</p>
-                          <p>{oneItem}</p>
-                        </div>
-                      })}
+                      <p>Gets you there when applied with:</p>
+                      <ul>
+                        {oneWorkout.usedWith && oneWorkout.usedWith.map((oneItem, index) => (
+                          <li key={index}>{oneItem}</li>
+                        ))}
+                      </ul>
                     </HoverCardContent>
                   </HoverCard>
                 </td>
+                <td><button onClick={() => handleDelete(oneWorkout._id)}>delete</button></td>
               </tr>
             })}
           </tbody>

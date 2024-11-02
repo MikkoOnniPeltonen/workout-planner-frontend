@@ -18,7 +18,7 @@ class ExerciseService {
     }
 
     getExercisesByMuscleGroups(muscleGroups) {
-        return this.api.post('/exercises/by-muscle-groups', { muscleGroups });
+        return this.api.post('/exercises/by-muscle-groups', muscleGroups);
     }
 
 }
