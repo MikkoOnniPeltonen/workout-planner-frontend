@@ -5,7 +5,7 @@ import workoutService from '@/services/workouts.service'
 
 function Choose( exercises= {}, userData = {}, isEditMode = false ) {
 
-    const [selectedMuscleGroups, setSelectedMuscleGroups] = useState(['Core'])
+    const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([])
     const [workoutName, setWorkoutName] = useState(isEditMode ? userData.name : '')
     const [step, setStep] = useState(1)
 
@@ -19,35 +19,34 @@ function Choose( exercises= {}, userData = {}, isEditMode = false ) {
 
     const handleSelection = (muscleGroupName) => {
 
-        let newSelectedGroups = [...selectedMuscleGroups]
+        let newSelectedGroups = ['Core']
 
         if (muscleGroupName === 'Legs' || muscleGroupName === 'Back') {
                 
             if (!newSelectedGroups.includes(muscleGroupName)) {
-                newSelectedGroups = ['Core', muscleGroupName]
+                newSelectedGroups.push(muscleGroupName)
+            } else {
+                newSelectedGroups = [...newSelectedGroups, ...selectedMuscleGroups.slice(1)]
             }
             setStep(2)
+
         } else {
 
-            const firstGroup = newSelectedGroups[0]
-            const secondGroup = newSelectedGroups.length > 1 ? newSelectedGroups[1] : null
-            if (secondGroup && ['Legs', 'Back'].includes(secondGroup)) {
+            newSelectedGroups = [
+                ...newSelectedGroups,
+                ...selectedMuscleGroups.slice(1).filter(group => group !== muscleGroupName)
+            ]
 
-                if (newSelectedGroups.includes(muscleGroupName)) {
-                    newSelectedGroups = newSelectedGroups.filter(group => group !== muscleGroupName)
-                } else {
-                    if (muscleGroupName !== 'Core') {
-                        newSelectedGroups.push(muscleGroupName)
-                    }
-                }
+            if (!newSelectedGroups.includes(muscleGroupName) && muscleGroupName !== 'Core') {
+                newSelectedGroups.push(muscleGroupName)
             }
 
             if (newSelectedGroups.length >= 3) {
                 setStep(3)
-            }    
+            }
         }
         setSelectedMuscleGroups(newSelectedGroups)
-        
+        console.log(selectedMuscleGroups)
     }
 
     console.log(exercises)
@@ -55,28 +54,18 @@ function Choose( exercises= {}, userData = {}, isEditMode = false ) {
 
     const handleSubmit = async () => {
 
-        const isValidSelection = selectedMuscleGroups.length >= 2 && (selectedMuscleGroups[0] === 'Legs' || selectedMuscleGroups[0] === 'Back') && selectedMuscleGroups[selectedMuscleGroups.length - 1] === 'Core'
-        
-        if (!isValidSelection) {
-            console.error('No Muscle groups selected.')
-            return
-        }
-
         try {
 
             console.log('Submitting exercises', selectedMuscleGroups)
-            
-            const getExercisesByMuscleGroup = await exerciseService.getExercisesByMuscleGroups(selectedMuscleGroups)
-            console.log(getExercisesByMuscleGroup)
-            const dataToBackend = { name: workoutName, exercises: getExercisesByMuscleGroup.data }
-
-            console.log(dataToBackend, isEditMode)
+            console.log(workoutName)
 
             if (isEditMode) {
 
-                await workoutService.updateWorkout(userData._id, dataToBackend)
+                const updatedWorkout = { name: workoutName, exercises: selectedMuscleGroups }
+                await workoutService.updateWorkout(userData._id, updatedWorkout)
             } else {
-                await workoutService.createWorkout(dataToBackend)
+                const getWorkoutByMuscleGroup = await exerciseService.createWorkoutByMuscleGroups({ workoutName: workoutName, muscleGroups: selectedMuscleGroups })
+                console.log(getWorkoutByMuscleGroup)
             }
         
             setSelectedMuscleGroups([])
@@ -138,7 +127,7 @@ function Choose( exercises= {}, userData = {}, isEditMode = false ) {
     
                                 <input type="checkbox" className='btn-check' id="btncheck1" autoComplete="off" />
                                 <label className="btn btn-outline-primary" htmlFor="btncheck1" onClick={() => handleSelection('Chest')} disabled={step !== 1}>Chest</label>
-                    
+
                                 <input type="checkbox" className='btn-check' id="btncheck2" autoComplete="off" />
                                 <label className="btn btn-outline-primary" htmlFor="btncheck2" onClick={() => handleSelection('Upper back')} disabled={step !== 1}>Upper back</label>
                     
@@ -156,16 +145,16 @@ function Choose( exercises= {}, userData = {}, isEditMode = false ) {
                             1 Round
                         </td>
                         <td>
-                            <button type="button" className='btn btn-primary' onClick={() => handleSelection('Core')} disabled={step !== 3}>Core</button>
+                            <button type="button" className='btn btn-primary' onClick={() => setStep(4)} disabled={step !== 3}>Core</button>
                         </td>
                     </tr>
-                    <tr className={step < 3 ? 'disabled' : ''}>
+                    <tr className={step < 4 ? 'disabled' : ''}>
                         <th scope='row'>Ready</th>
                         <td>
                             Set
                         </td>
                         <td>
-                            <button type='submit' className='btn btn-outline-success btn-lg' disabled={step !== 3} onClick={handleSubmit}>Go!</button>
+                            <button type='submit' className='btn btn-outline-success btn-lg' disabled={step !== 4} onClick={handleSubmit}>Go!</button>
                         </td>
                     </tr>
                 </tbody>

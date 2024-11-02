@@ -31,10 +31,6 @@ class WorkoutService{
         return this.api.get(`/workouts/${workoutId}`)
       }
 
-      createWorkout(workoutToCreate){
-        return this.api.post('/workouts',workoutToCreate)
-      }
-
       updateWorkout(workoutId, workoutInfo ){
         return this.api.put(`/workouts/${workoutId}`,workoutInfo)
       }

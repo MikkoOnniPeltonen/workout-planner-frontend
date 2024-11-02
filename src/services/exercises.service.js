@@ -17,8 +17,9 @@ class ExerciseService {
         });
     }
 
-    getExercisesByMuscleGroups(muscleGroups) {
-        return this.api.post('/exercises/by-muscle-groups', muscleGroups);
+    createWorkoutByMuscleGroups(dataToBackend) {
+        console.log(dataToBackend)
+        return this.api.post('/exercises/by-muscle-groups', dataToBackend);
     }
 
 }
