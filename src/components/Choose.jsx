@@ -95,7 +95,7 @@ function Choose( exercises= {}, userData = {}, isEditMode = false ) {
                                     ))}
                                 </select>
                             ) : (
-                                <Input value={workoutName} type='text' placeholder='Choose name' onChange={(e) => {setWorkoutName(e.target.value)}} />
+                                <Input required value={workoutName} type='text' placeholder='Choose name' onChange={(e) => {setWorkoutName(e.target.value)}} />
                             )}
                         </th>
                     </tr>
@@ -129,7 +129,7 @@ function Choose( exercises= {}, userData = {}, isEditMode = false ) {
                                 <label className="btn btn-outline-primary" htmlFor="btncheck1" onClick={() => handleSelection('Chest')} disabled={step !== 1}>Chest</label>
 
                                 <input type="checkbox" className='btn-check' id="btncheck2" autoComplete="off" />
-                                <label className="btn btn-outline-primary" htmlFor="btncheck2" onClick={() => handleSelection('Upper back')} disabled={step !== 1}>Upper back</label>
+                                <label className="btn btn-outline-primary" htmlFor="btncheck2" onClick={() => handleSelection('Upper Back')} disabled={step !== 1}>Upper Back</label>
                     
                                 <input type="checkbox" className='btn-check' id="btncheck3" autoComplete="off" />
                                 <label className="btn btn-outline-primary" htmlFor="btncheck3" onClick={() => handleSelection('Shoulders')} disabled={step !== 1}>Shoulders</label>

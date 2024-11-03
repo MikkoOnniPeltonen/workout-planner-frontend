@@ -3,7 +3,6 @@
 // creating the context
 
 import { createContext, useState, useEffect } from "react";
-import axios from 'axios'
 import authService from '../services/auth.service'
 
 const AuthContext = createContext()
@@ -30,20 +29,23 @@ function AuthContextProvider(props) {
             authService.verify()
             .then((userInformation) => {
 
-                setLoggedInUser(userInformation.data)
+                setLoggedInUser(userInformation)
                 setIsLoading(false)
                 setIsLoggedIn(true)
             })
-            .catch(() => {
-                setIsLoading(false)
-                setIsLoggedIn(false)
+            .catch((error) => {
+                console.error('Verification failed', error)
                 setLoggedInUser(null)
+                setIsLoggedIn(false)
+            })
+            .finally(() => {
+                setIsLoading(false)
             })
         }
         else {
-            setIsLoading(false)
             setIsLoggedIn(false)
             setLoggedInUser(null)
+            setIsLoading(false)
         }
     }
 

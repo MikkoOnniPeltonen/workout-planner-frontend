@@ -19,6 +19,10 @@ function LoginPage() {
     function handleSubmit(e) {
         e.preventDefault()
 
+        if (!email || !password) {
+            console.error('Email and password required.')
+            return
+        }
         let logInformation = {email, password}
 
         authService.login(logInformation)
@@ -27,6 +31,9 @@ function LoginPage() {
             localStorage.setItem('token', token.data.authToken)
             authenticateUser()
             navigate('/user')
+        })
+        .catch((err) => {
+            console.error('Login failed', err)
         })
     }
 
@@ -54,7 +61,7 @@ function LoginPage() {
                     </form>
                 </CardContent>
                 <CardFooter>
-                    <Button type='submit' onClick={handleSubmit} className="w-full bg-blue-600 hover:bg-blue-700 text white">Log in</Button>
+                    <Button type='submit' className="w-full bg-blue-600 hover:bg-blue-700 text white">Log in</Button>
                 </CardFooter>
             </Card>
         </div>

@@ -70,7 +70,7 @@ function SignupPage() {
                     </form>
                 </CardContent>
                 <CardFooter>
-                    <Button type='submit' onClick={handleSubmit} className="w-full bg-blue-600 hover:bg-blue-700 text white">Sign up</Button>
+                    <Button type='submit' className="w-full bg-blue-600 hover:bg-blue-700 text white">Sign up</Button>
                 </CardFooter>
             </Card>
         </div>
