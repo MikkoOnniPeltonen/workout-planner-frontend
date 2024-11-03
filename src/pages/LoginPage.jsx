@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { AuthContext } from '../context/auth.context'
 import authService from "../services/auth.service"
 
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
+import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
 function LoginPage() {
@@ -58,11 +58,10 @@ function LoginPage() {
                             </label>
                             <input type='password' onChange={(e) => {setPassword(e.target.value)}} className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"/>
                         </div>
+                        <Button className="w-full bg-blue-600 hover:bg-blue-700 text white">Log in</Button>
                     </form>
                 </CardContent>
-                <CardFooter>
-                    <Button type='submit' className="w-full bg-blue-600 hover:bg-blue-700 text white">Log in</Button>
-                </CardFooter>
+
             </Card>
         </div>
     )

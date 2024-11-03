@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import authService from '../services/auth.service.js'
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
+import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
 
@@ -11,10 +11,9 @@ function SignupPage() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        password: ''
+        password: '',
     })
     
-
     const navigate = useNavigate()
 
     function handleSubmit(e) {
@@ -67,11 +66,9 @@ function SignupPage() {
                             </label>
                             <input name="password" value={formData.password} onChange={handleChange} type="password" className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition"/>
                         </div>
+                        <Button type='submit' className='w-full bg-blue-600 hover:bg-blue-700 text white'>Sign up</Button>
                     </form>
                 </CardContent>
-                <CardFooter>
-                    <Button type='submit' className="w-full bg-blue-600 hover:bg-blue-700 text white">Sign up</Button>
-                </CardFooter>
             </Card>
         </div>
     )
