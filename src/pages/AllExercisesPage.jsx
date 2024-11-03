@@ -89,7 +89,7 @@ function AllExercisesPage() {
         <div className="container mx-auto px-4 py-8">
             {shownExerciseIds.size >= allExercises.length ? (
                 <Link to='/user' className='text-3xl font-bold mb-6 text-center text-blue-600'>
-                    <h1>You Dominate</h1>
+                    <h1>Time to Dominate</h1>
                 </Link>
             ) : (
                 <h1 className="text-3xl font-bold mb-6 text-center">Your Dominoes'</h1>

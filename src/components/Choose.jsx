@@ -49,9 +49,6 @@ function Choose( exercises= {}, userData = {}, isEditMode = false ) {
         console.log(selectedMuscleGroups)
     }
 
-    console.log(exercises)
-
-
     const handleSubmit = async () => {
 
         try {

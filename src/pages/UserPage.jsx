@@ -8,6 +8,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import { toast } from 'react-toastify'
 import workoutService from '@/services/workouts.service'
 
 function UserPage() {
@@ -55,9 +56,14 @@ function UserPage() {
         allWorkouts.splice(deletedWorkoutIndex, 1)
         setAllWorkouts([...allWorkouts])
 
-        toast.success('Workout deleted succesfully!')
+        toast.success('Workout deleted succesfully!', {
+          position: 'bottom-center'
+        })
       })
       .catch((error) => {
+        toast.error('Error in deleting workout.', {
+          position: 'bottom-center'
+        })
         console.error('Error in deleting workout.', error)
       })
     }
