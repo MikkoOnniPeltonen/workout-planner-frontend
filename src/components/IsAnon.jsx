@@ -9,7 +9,7 @@ function IsAnon(props) {
 
     if (isLoggedIn) {
 
-        return <Navigate to='/exercises' />
+        return <Navigate to='/user' />
     }
     else {
         return (

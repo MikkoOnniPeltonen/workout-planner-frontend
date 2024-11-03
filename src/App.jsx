@@ -10,9 +10,7 @@ import AllExercisesPage from './pages/AllExercisesPage'
 import IsPrivate from './components/IsPrivate'
 import IsAnon from './components/IsAnon'
 import Navbar from './components/Navbar'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-
+import { Toaster } from 'react-hot-toast'
 
 
 function App() {
@@ -28,7 +26,10 @@ function App() {
         <Route path={'/login'} element={<IsAnon><LoginPage /></IsAnon>} />
         <Route path={'/*'} element={<ErrorPage />} />
       </Routes>
-      <ToastContainer />
+      <Toaster 
+        position='bottom-center'
+        reverseOrder={false}
+      />
     </>
   )
 }
