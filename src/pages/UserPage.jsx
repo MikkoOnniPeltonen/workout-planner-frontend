@@ -9,6 +9,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import workoutService from '@/services/workouts.service'
+import toast from 'react-hot-toast'
 
 function UserPage() {
 
