@@ -97,7 +97,7 @@ function AllExercisesPage() {
             
 
             <div className="exercise-card-container">
-                {loading ? ( <div className="w-full flex justify-center"><LoadingSpinner /></div> ) : (allExercises && 
+                {loading ? ( <LoadingSpinner /> ) : (allExercises && 
                     visibleExercises.map(({ exercise, index }) => (
                         <div key={exercise._id} className="cards-container" onClick={() => handleExerciseClick(index)} style={{ cursor: 'pointer' }}>
                             <ExerciseCard key={exercise._id} exercise={exercise}/>
