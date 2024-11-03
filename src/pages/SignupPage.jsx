@@ -47,24 +47,24 @@ function SignupPage() {
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         
                         <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">
+                            <label htmlFor='name' className="block text-sm font-medium text-gray-700">
                                 Name:
                             </label>
-                            <input name="name" value={formData.name} onChange={handleChange} type="text"  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                            <input name="name" id='name' value={formData.name} onChange={handleChange} type="text"  autoComplete='name' className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition" />
                             
                         </div>
                         <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">
+                            <label htmlFor='email' className="block text-sm font-medium text-gray-700">
                                 Email:
                             </label>
-                            <input name="email" value={formData.email} onChange={handleChange} type="email" className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition"/>
+                            <input name="email" id='email' value={formData.email} onChange={handleChange} type="email" autoComplete='email' className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition"/>
                             
                         </div>
                         <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">
+                            <label htmlFor='new-password' className="block text-sm font-medium text-gray-700">
                                 Password:
                             </label>
-                            <input name="password" value={formData.password} onChange={handleChange} type="password" className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition"/>
+                            <input name="new-password" id='new-password' value={formData.password} onChange={handleChange} type="password" autoComplete='new-password' className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition"/>
                         </div>
                         <Button type='submit' className='w-full bg-blue-600 hover:bg-blue-700 text white'>Sign up</Button>
                     </form>
