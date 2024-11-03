@@ -3,8 +3,8 @@
 
 function LoadingSpinner() {
     return (
-      <div className="flex justify-center items-center">
-        <div className="w-10 h-10 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+      <div className="flex justify-center items-center loading-spinner">
+        <div className="spinner-border"></div>
       </div>
     )
   }

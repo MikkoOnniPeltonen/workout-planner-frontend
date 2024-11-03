@@ -1,5 +1,6 @@
 import LoadingSpinner from "@/components/LoadingSpinner"
 
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import ExerciseCard from "@/components/ExerciseCard"
@@ -86,7 +87,14 @@ function AllExercisesPage() {
 
   return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-6 text-center">Your Dominoes'</h1>
+            {shownExerciseIds.size >= allExercises.length ? (
+                <Link to='/user' className='text-3xl font-bold mb-6 text-center text-blue-600'>
+                    <h1>You Dominate</h1>
+                </Link>
+            ) : (
+                <h1 className="text-3xl font-bold mb-6 text-center">Your Dominoes'</h1>
+            )}
+            
 
             <div className="exercise-card-container">
                 {loading ? ( <div className="w-full flex justify-center"><LoadingSpinner /></div> ) : (allExercises && 
