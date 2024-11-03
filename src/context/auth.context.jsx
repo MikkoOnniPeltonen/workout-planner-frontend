@@ -29,7 +29,7 @@ function AuthContextProvider(props) {
             authService.verify()
             .then((userInformation) => {
 
-                setLoggedInUser(userInformation)
+                setLoggedInUser(userInformation.data)
                 setIsLoading(false)
                 setIsLoggedIn(true)
             })
