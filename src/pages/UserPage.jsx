@@ -40,9 +40,9 @@ function UserPage() {
 
     useEffect(() => {
 
-      axios.get(`${import.meta.env.VITE_BACKEND_URL}/workouts`)
+      workoutService.getAllWorkouts()
       .then((foundWorkouts) => {
-        setAllWorkouts(foundWorkouts.data)
+        setAllWorkouts(foundWorkouts)
       })
       .catch((error) => {
         console.error('Error fetching workouts', error)
@@ -120,7 +120,7 @@ function UserPage() {
     )}
     {view === 'create' && <Choose />}
     {view === 'edit' && <Choose userData={allWorkouts} isEditMode = {true} />}
-    {view === 'statistics' && <Statistics workouts={allWorkouts} />}
+    {view === 'statistics' && <Statistics creatorId={creatorId} />}
    </main>
 
     </div>

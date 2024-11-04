@@ -1,10 +1,14 @@
 
 import { Pie } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import { useState } from 'react'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 function Statistics(workouts) {
+
+    const [chartWorkouts, setChartWorkouts] = useState([])
+    setChartWorkouts(workouts)
 
     const muscleGroups = {
         Legs: 0,
@@ -16,7 +20,7 @@ function Statistics(workouts) {
         Core: 0
     }
 
-    workouts.forEach((workout) => {
+    chartWorkouts.forEach((workout) => {
         workout.exercises.forEach((exercise) => {
             if (muscleGroups[exercise]) {
                 muscleGroups[exercise] +1
