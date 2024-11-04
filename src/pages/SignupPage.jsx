@@ -19,7 +19,8 @@ function SignupPage() {
         e.preventDefault()
 
         let newUser = formData
-
+        console.log(newUser)
+        
         authService.signup(newUser)
         .then((createdUser) => {
             navigate('/login')
