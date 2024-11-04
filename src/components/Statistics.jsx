@@ -4,7 +4,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-function Statistics({ workouts }) {
+function Statistics(workouts) {
 
     const muscleGroups = {
         Legs: 0,

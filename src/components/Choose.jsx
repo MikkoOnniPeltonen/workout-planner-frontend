@@ -1,17 +1,32 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Input } from "@/components/ui/input"
-import exerciseService from '@/services/exercises.service'
 import workoutService from '@/services/workouts.service'
+import musclegroupService from '@/services/musclegroups.service'
 
-function Choose( exercises= {}, userData = {}, isEditMode = false ) {
+function Choose( userData={}, isEditMode = false ) {
 
+    const [editedWorkoutId, setEditedWorkoutId] = useState('')
+    const [allMuscleGroups, setAllMuscleGroups] = useState([])
     const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([])
     const [workoutName, setWorkoutName] = useState(isEditMode ? userData.name : '')
     const [step, setStep] = useState(1)
 
+    useEffect(() => {
+
+        const fetchMuscleGroups = async () => {
+            try {
+                const muscleGroups = await musclegroupService.getAllmusclegroups()
+                setAllMuscleGroups(muscleGroups)
+            } catch (error) {
+                console.error('Error fetching muscle groups in component', error)
+            }
+        }
+        fetchMuscleGroups()
+    }, [])
 
     const handleWorkoutSelect = (workoutName) => {
         const selectedWorkout = userData.find(workout => workout.name === workoutName)
+        setEditedWorkoutId(selectedWorkout._id)
         setWorkoutName(selectedWorkout.name)
         setSelectedMuscleGroups(selectedWorkout.exercises.flatMap(ex => ex.belongsTo))
         setStep(4)
@@ -56,15 +71,22 @@ function Choose( exercises= {}, userData = {}, isEditMode = false ) {
             console.log('Submitting exercises', selectedMuscleGroups)
             console.log(workoutName)
 
+
+            const selectedGroupIds = allMuscleGroups.filter((group) => selectedMuscleGroups.includes(group.name)).map((group) => group._id)
+
+            const workoutData = {
+                name: workoutName,
+                exercises: selectedGroupIds
+            }
+
             if (isEditMode) {
 
-                const updatedWorkout = { name: workoutName, exercises: selectedMuscleGroups }
-                await workoutService.updateWorkout(userData._id, updatedWorkout)
+                await workoutService.updateWorkout(editedWorkoutId, workoutData)
             } else {
-                const getWorkoutByMuscleGroup = await exerciseService.createWorkoutByMuscleGroups({ workoutName: workoutName, muscleGroups: selectedMuscleGroups })
-                console.log(getWorkoutByMuscleGroup)
+                await workoutService.createWorkout(workoutData)
+                toast.success('Workout created succesfully!')
             }
-        
+            setEditedWorkoutId('')
             setSelectedMuscleGroups([])
             setWorkoutName('')
             setStep(1)

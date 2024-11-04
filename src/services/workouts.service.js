@@ -23,20 +23,44 @@ class WorkoutService{
      
       }
 
-      getAllWorkouts(){
-        return this.api.get('/workouts')
+      async getAllWorkouts(){
+        try {
+          const response = await this.api.get('/workouts')
+          return response.data
+        } catch (error) {
+          console.error('Error fetching workouts', error)
+          throw error
+        }
       }
 
-      getWorkoutForInfo(workoutId){
-        return this.api.get(`/workouts/${workoutId}`)
+      async createWorkout(createdWorkout) {
+        try {
+          const response = await this.api.post('/workouts', createdWorkout)
+          return response.data
+        } catch (error) {
+          console.error('Error creating a workout', error)
+          throw error
+        }
       }
 
-      updateWorkout(workoutId, workoutInfo ){
-        return this.api.put(`/workouts/${workoutId}`,workoutInfo)
+      async updateWorkout(workoutId, workoutInfo ){
+        try {
+          const response = await this.api.put(`/workouts/${workoutId}`, workoutInfo)
+          return response.data
+        } catch (error) {
+          console.error('Error updating workout', error)
+          throw error
+        }
       }
 
-      deleteWorkout(workoutId) {
-        return this.api.delete(`/workouts/${workoutId}`)
+      async deleteWorkout(workoutId) {
+        try {
+          const response = await this.api.delete(`/workouts/${workoutId}`)
+          return response.data
+        } catch (error) {
+          console.error('Error deleting workout', error)
+          throw error
+        }
       }
 
 

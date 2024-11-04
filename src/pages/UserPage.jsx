@@ -9,7 +9,9 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import workoutService from '@/services/workouts.service'
+import exerciseService from "@/services/exercises.service"
 import toast from 'react-hot-toast'
+import { searchForWorkspaceRoot } from "vite"
 
 function UserPage() {
 
@@ -24,14 +26,14 @@ function UserPage() {
 
     useEffect(() => {
 
-
-      axios.get(`${import.meta.env.VITE_BACKEND_URL}/exercises`)
-      .then((foundExercises) => {
-          setAllExercises(foundExercises.data)
-      })
-      .catch((err) => {
+        exerciseService.getAllExercises().then((foundExercises) => {
+          setAllExercises(foundExercises)
+        })
+        .catch((err) => {
           console.error('Error fetching exercises', err)
-      })
+        })
+  
+
 
       console.log(allExercises)
     }, [])
@@ -74,7 +76,7 @@ function UserPage() {
 
     </aside>
     <main className="content">
-      {view === 'allWorkouts' && allWorkouts ? (
+      {view === 'allWorkouts' && allWorkouts.length > 0 ? (
         <table>
           <thead>
             <tr>
@@ -116,8 +118,8 @@ function UserPage() {
         <p>No workouts available. Create one to get started!</p>
       </Card>
     )}
-    {view === 'create' && <Choose exercises={allExercises} />}
-    {view === 'edit' && <Choose exercises = {allExercises} userData = {allWorkouts} isEditMode = {true} />}
+    {view === 'create' && <Choose />}
+    {view === 'edit' && <Choose userData={allWorkouts} isEditMode = {true} />}
     {view === 'statistics' && <Statistics workouts={allWorkouts} />}
    </main>
 

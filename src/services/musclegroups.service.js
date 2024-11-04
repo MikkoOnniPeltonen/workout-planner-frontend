@@ -1,6 +1,7 @@
+
 import axios from 'axios';
 
-class ExerciseService {
+class MuscleGroupService {
     constructor() {
         this.api = axios.create({
             baseURL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:5005'
@@ -17,18 +18,18 @@ class ExerciseService {
         });
     }
 
-    async getAllExercises() {
+    async getAllmusclegroups() {
         try {
-            const response = await this.api.get('/exercises')
-            return response.data 
+            const response = await this.api.get('/musclegroups')
+            return response.data
         } catch (error) {
-            console.error('Error in getting exercises', error)
+            console.error('Error fetching musclegroups', error)
             throw error
         }
     }
 
 }
 
-const exerciseService = new ExerciseService();
+const musclegroupService = new MuscleGroupService();
 
-export default exerciseService;
+export default musclegroupService;
