@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 
 function SignupPage() {
 
-
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -35,6 +34,7 @@ function SignupPage() {
             ...formData,
             [e.target.name]: e.target.value
         })
+        console.log(formData)
     }
 
     return (
@@ -64,7 +64,7 @@ function SignupPage() {
                             <label htmlFor='new-password' className="block text-sm font-medium text-gray-700">
                                 Password:
                             </label>
-                            <input name="new-password" id='new-password' value={formData.password} onChange={handleChange} type="password" autoComplete='new-password' className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition"/>
+                            <input name="password" id='new-password' value={formData.password} onChange={handleChange} type="password" autoComplete='new-password' className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition"/>
                         </div>
                         <Button type='submit' className='w-full bg-blue-600 hover:bg-blue-700 text white'>Sign up</Button>
                     </form>
