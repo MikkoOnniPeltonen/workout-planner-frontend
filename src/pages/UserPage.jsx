@@ -74,7 +74,7 @@ function UserPage() {
 
     </aside>
     <main className="content">
-      {view === 'allWorkouts' && allWorkouts.length > 0 ? (
+      {view === 'allWorkouts' && allWorkouts ? (
         <table>
           <thead>
             <tr>
