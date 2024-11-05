@@ -141,6 +141,56 @@ tr.done {
   background-color: #ecf0f1;
 }
 
+/* CHOOSE Component button styling */
+
+/* Import this CSS file in your Choose component: import './Choose.css'; */
+
+.btn-group .btn {
+  font-size: 1.2rem; /* Increase the font size */
+  padding: 0.75rem 1.5rem; /* Increase padding for a larger click area */
+  border-radius: 8px; /* Rounded corners */
+  border: 2px solid #007bff; /* Border color */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition on hover */
+}
+
+.btn-group .btn:hover {
+  transform: scale(1.05); /* Slightly increase size on hover */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}
+
+.btn-group .btn-check:checked + .btn,
+.btn-group .btn-check:active + .btn {
+  background-color: #007bff; /* Checked background color */
+  color: #fff; /* Checked text color */
+}
+
+.btn-group input[type="radio"].btn-check,
+.btn-group input[type="checkbox"].btn-check {
+  display: none; /* Hide default radio and checkbox styles */
+}
+
+.btn-primary, .btn-outline-primary, .btn-outline-success {
+  font-size: 1.25rem; /* Larger font size for all buttons */
+  padding: 0.75rem 1.5rem; /* Padding for larger button */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary:hover, .btn-outline-primary:hover, .btn-outline-success:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  color: #ffffff; /* Text color on hover */
+}
+
+.btn-outline-success {
+  border: 2px solid #28a745; /* Border color for success button */
+}
+
+.btn-outline-success:hover {
+  background-color: #28a745; /* Green background on hover */
+  color: #fff;
+}
+
 
 /* HOME PAGE Styling  */
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Input } from "../components/ui/input"
 import workoutService from '../services/workouts.service'
 import musclegroupService from '../services/musclegroups.service'
+import { toast } from 'react-hot-toast'
 
 function Choose({ userData=[], isEditMode = false }) {
 
@@ -87,9 +88,11 @@ function Choose({ userData=[], isEditMode = false }) {
             if (isEditMode) {
 
                 await workoutService.updateWorkout(editedWorkoutId, workoutData)
+                toast.success('Workout updated succesfully!')
             } else {
                 await workoutService.createWorkout(workoutData)
                 console.log('Workout created succesfully!')
+                toast.success('Workout created succesfully!')
             }
             setEditedWorkoutId('')
             setSelectedMuscleGroups([])
@@ -97,7 +100,8 @@ function Choose({ userData=[], isEditMode = false }) {
             setStep(1)
         }
         catch (error) {
-            console.error('Error submitting exercises', error)
+            console.error('Error submitting workouts', error)
+            toast.error('Something went wrong.')
         }
     }
 
