@@ -24,43 +24,67 @@ function UserPage() {
 
     useEffect(() => {
 
-        exerciseService.getAllExercises().then((foundExercises) => {
-          setAllExercises(foundExercises)
-          console.log(foundExercises)
-        })
-        .catch((err) => {
-          console.error('Error fetching exercises', err)
-        })
-  
+      const fetchExercises = async () => {
+        
+        try {
+          
+          const response = await exerciseService.getAllExercises()
+          setAllExercises(response)
 
-
-      console.log(allExercises)
+        } catch (error) {
+          console.error('Error fetching exercises', error)
+        }
+      }
+      fetchExercises()
     }, [])
 
     useEffect(() => {
+      
+      const fetchWorkouts = async () => {
 
-      workoutService.getAllWorkouts()
-      .then((foundWorkouts) => {
-        setAllWorkouts(foundWorkouts)
-      })
-      .catch((error) => {
-        console.error('Error fetching workouts', error)
-      })
+        try {
+          const response = await workoutService.getAllWorkouts()
 
+          if (response.status === 204) {
+            console.log('No workouts found')
+          } else if (response.data.message) {
+            console.log(response.data.message)
+          } else {
+            setAllWorkouts(response)
+          }
+        } catch (error) {
+          console.error('Error fetching workouts', error)
+        }
+      }
+      fetchWorkouts()
     }, [view])
 
     function handleDelete(oneWorkoutId) {
+
+      if (!window.confirm('Are you sure you want to delete this workout?')) {
+        return
+      }
+
       workoutService.deleteWorkout(oneWorkoutId)
       .then(() => {
 
         const deletedWorkoutIndex = allWorkouts.findIndex(workout => workout._id === oneWorkoutId)
-        allWorkouts.splice(deletedWorkoutIndex, 1)
-        setAllWorkouts([...allWorkouts])
+        
+        if (deletedWorkoutIndex === -1) {
+          toast.error('Workout not found.')
+          return
+        }
+        
+        const updatedWorkouts = [...allWorkouts]
+        updatedWorkouts.splice(deletedWorkoutIndex, 1)
+
+        setAllWorkouts(updatedWorkouts)
 
         toast.success('Workout deleted succesfully!')
       })
       .catch((error) => {
-        toast.error('Error in deleting workout.')
+        const errorMessage = error.response?.data?.errorMessage || 'Error in deleting workout.'
+        toast.error(errorMessage)
         console.error('Error in deleting workout.', error)
       })
     }
