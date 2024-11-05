@@ -104,9 +104,13 @@ function UserPage() {
               <tr key={oneWorkout._id}>
                 <td>{oneWorkout.name}</td>
                 <td>
-                  {oneWorkout.exercises && oneWorkout.exercises.map((oneExercise) => {
+                  {oneWorkout.exercises && Array.isArray(oneWorkout.exercises) ? (
+                    oneWorkout.exercises.map((oneExercise) => (
                     <div key={oneExercise._id}>{oneExercise.name}</div>
-                  })}
+                    ))
+                  ) : (
+                    <div>No exercises</div>
+                  )}
                 </td>
                 <td>
                   <HoverCard>
@@ -114,9 +118,13 @@ function UserPage() {
                     <HoverCardContent>
                       <p>Gets you there when applied with:</p>
                       <ul className="list-disc pl-4">
-                        {oneWorkout.usedWith && oneWorkout.usedWith.map((oneItem, index) => (
-                          <li key={index} className="text-sm m-2">{oneItem}</li>
-                        ))}
+                        {oneWorkout.usedWith && Array.isArray(oneWorkout.usedWith) ? (
+                          oneWorkout.usedWith.map((oneItem, index) => (
+                            <li key={index} className="text-sm m-2">{oneItem}</li>
+                          ))
+                        ) : (
+                          <li>No additional information</li>
+                        )}
                       </ul>
                     </HoverCardContent>
                   </HoverCard>
@@ -127,10 +135,10 @@ function UserPage() {
           </tbody>
         </table>
       ) : (
-      <Card>
-        <p>No workouts available. Create one to get started!</p>
-      </Card>
-    ))}
+        <Card>
+          <p>No workouts available. Create one to get started!</p>
+        </Card>
+      ))}
     {view === 'create' && <Choose />}
     {view === 'edit' && <Choose userData={allWorkouts} isEditMode = {true} />}
     {view === 'statistics' && <Statistics creatorId={creatorId} />}
