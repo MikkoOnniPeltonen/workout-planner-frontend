@@ -48,7 +48,7 @@ function UserPage() {
       
       
       fetchWorkouts()
-    }, [])
+    }, [view])
 
     function handleDelete(oneWorkoutId) {
 
