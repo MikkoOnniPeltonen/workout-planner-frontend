@@ -9,11 +9,12 @@ import {
 } from "../components/ui/hover-card"
 import workoutService from '../services/workouts.service'
 import { toast } from 'react-hot-toast'
+import LoadingSpinner from "../components/LoadingSpinner"
 
 function UserPage() {
 
     const [allWorkouts, setAllWorkouts] = useState(new Map())
-
+    const [isLoading, setIsLoading] = useState(false)
     const [view, setView] = useState('allWorkouts')
 
     const handleSelectView = (selectedView) => {
@@ -25,20 +26,29 @@ function UserPage() {
       const fetchWorkouts = async () => {
         
         try {
+          setIsLoading(true)
+
           const response = await workoutService.getAllWorkouts()
           
-          if (response.status === 204) {
-            console.log('Message Userpage: No workouts found.')
-          } else if (response.data.message) {
-            console.log(response.data.message)
-          } else {
-            const workoutsMap = new Map(response.map(oneWorkout => [oneWorkout._id, workout]))
+          if (response.message) {
+            console.log('Message Userpage: No workouts found.', response.message)
+            setAllWorkouts(new Map())
+          } else if (Array.isArray(response)) {
+            const workoutsMap = new Map(
+              response.map(oneWorkout => [oneWorkout._id, oneWorkout])
+            )
+            
             setAllWorkouts(workoutsMap)
+          
           }
         } catch (error) {
-          console.error('Error fetching exercises', error)
+          console.error('Error fetching workouts', error)
+        } finally {
+          setIsLoading(false)
         }
       }
+      
+      
       fetchWorkouts()
     }, [view])
 
@@ -79,7 +89,7 @@ function UserPage() {
 
     </aside>
     <main className="content">
-      {view === 'allWorkouts' && allWorkouts.size > 0 ? (
+      {isLoading ? (<LoadingSpinner />) : (view === 'allWorkouts' && allWorkouts.size > 0 ? (
         <table>
           <thead>
             <tr>
@@ -120,7 +130,7 @@ function UserPage() {
       <Card>
         <p>No workouts available. Create one to get started!</p>
       </Card>
-    )}
+    ))}
     {view === 'create' && <Choose />}
     {view === 'edit' && <Choose userData={allWorkouts} isEditMode = {true} />}
     {view === 'statistics' && <Statistics creatorId={creatorId} />}
