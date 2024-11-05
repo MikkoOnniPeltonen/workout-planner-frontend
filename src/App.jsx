@@ -1,6 +1,7 @@
-import './App.css'
+
 import { Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage'
+import './App.css'
 import UserPage from './pages/UserPage'
 import ErrorPage from './pages/ErrorPage'
 import SignupPage from './pages/SignupPage'
@@ -12,8 +13,8 @@ import IsAnon from './components/IsAnon'
 import Navbar from './components/Navbar'
 import { Toaster } from 'react-hot-toast'
 
-
 function App() {
+  const [count, setCount] = useState(0)
 
   return (
     <>
