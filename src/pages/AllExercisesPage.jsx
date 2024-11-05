@@ -88,11 +88,11 @@ function AllExercisesPage() {
   return (
         <div className="container mx-auto px-4 py-8">
             {shownExerciseIds.size >= allExercises.length ? (
-                <Link to='/user' className='text-3xl font-bold mb-6 text-center text-blue-600'>
-                    <h1>Time to Dominate</h1>
+                <Link to='/user' className='block mb-10'>
+                    <h1 className="text-5xl font-extrabold mb-8 text-center text-blue-600 shadow-lg">Time to Dominate</h1>
                 </Link>
             ) : (
-                <h1 className="text-3xl font-bold mb-6 text-center">Your Dominoes'</h1>
+                <h1 className="text-5xl font-extrabold mb-10 text-center text-gray-800">Your Dominoes'</h1>
             )}
             
 
@@ -116,9 +116,9 @@ function AllExercisesPage() {
                     {selectedExercise && (
                         <>
                             <img src={motivationItems[currentMessage].icon} alt="Exercise icon" className="drawer-icon" />
-                            <ul className="flex gap-6 list-disc pl-4">
+                            <ul className="flex gap-10 list-disc pl-4">
                                 {selectedExercise.usedWith?.map((item, index) => (
-                                    <li key={index} className="text-sm m-2">{item}</li>
+                                    <li key={index} className="text-sm m-4">{item}</li>
                                 ))}
                             </ul>
                         </>
