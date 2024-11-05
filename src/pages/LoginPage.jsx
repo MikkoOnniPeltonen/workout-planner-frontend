@@ -61,7 +61,7 @@ function LoginPage() {
     }
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center-justify-center p-4">
-            {isLoading && <h5 className="text-center text-gray-600">Logging in...</h5>}
+            {isLoading && (<LoadingSpinner />) }
             <Card className="w-full max-w-md shadow-lg">
                 <CardHeader>
                     <h2 className="text-2xl font-semibold text-center text-gray-800">Log in for your Workout planner</h2>
