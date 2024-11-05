@@ -116,9 +116,9 @@ function AllExercisesPage() {
                     {selectedExercise && (
                         <>
                             <img src={motivationItems[currentMessage].icon} alt="Exercise icon" className="drawer-icon" />
-                            <ul className="flex gap-4 list-disc pl-4">
-                                {selectedExercise.usedWith.map((item, index) => (
-                                    <li key={index} className="text-sm">{item}</li>
+                            <ul className="flex gap-6 list-disc pl-4">
+                                {selectedExercise.usedWith?.map((item, index) => (
+                                    <li key={index} className="text-sm m-2">{item}</li>
                                 ))}
                             </ul>
                         </>

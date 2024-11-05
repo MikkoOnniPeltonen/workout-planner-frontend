@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { AuthContext } from '../context/auth.context'
 import authService from "../services/auth.service"
 
+import LoadingSpinner from '../components/LoadingSpinner'
 import { Card, CardHeader, CardContent } from '../components/ui/card'
 import { Button } from '../components/ui/button'
 
@@ -13,14 +14,16 @@ function LoginPage() {
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
 
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
     const { authenticateUser } = useContext(AuthContext)
 
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
 
+        setIsLoading(true)
 
         if(!email) setEmailError('Email required, please enter your email.')
         if(!password) setPasswordError('Password required, please enter a password.')
@@ -30,18 +33,21 @@ function LoginPage() {
             console.error('Email and password required.')
             return
         }
+
         let logInformation = {email, password}
 
-        authService.login(logInformation)
-        .then((token) => {
-            console.log(token.data)
+        try {
+            const token = await authService.login(logInformation)
             localStorage.setItem('token', token.data.authToken)
             authenticateUser()
             navigate('/user')
-        })
-        .catch((err) => {
-            console.error('Login failed', err)
-        })
+        
+        } catch (error) {
+            console.error('Login failed', error)
+        } finally {
+            setIsLoading(false)
+        }
+  
     }
 
     const handleEmailChange = (e) => {
@@ -55,6 +61,7 @@ function LoginPage() {
     }
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center-justify-center p-4">
+            {isLoading && <h5 className="text-center text-gray-600">Logging in...</h5>}
             <Card className="w-full max-w-md shadow-lg">
                 <CardHeader>
                     <h2 className="text-2xl font-semibold text-center text-gray-800">Log in for your Workout planner</h2>

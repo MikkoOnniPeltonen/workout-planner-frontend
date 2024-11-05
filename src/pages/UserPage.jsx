@@ -8,13 +8,11 @@ import {
   HoverCardTrigger,
 } from "../components/ui/hover-card"
 import workoutService from '../services/workouts.service'
-import exerciseService from "../services/exercises.service"
 import { toast } from 'react-hot-toast'
 
 function UserPage() {
 
-    const [allWorkouts, setAllWorkouts] = useState([])
-    const [allExercises, setAllExercises] = useState([])
+    const [allWorkouts, setAllWorkouts] = useState(new Map())
 
     const [view, setView] = useState('allWorkouts')
 
@@ -24,40 +22,25 @@ function UserPage() {
 
     useEffect(() => {
 
-      const fetchExercises = async () => {
+      const fetchWorkouts = async () => {
         
         try {
+          const response = await workoutService.getAllWorkouts()
           
-          const response = await exerciseService.getAllExercises()
-          setAllExercises(response)
-
+          if (response.status === 204) {
+            console.log('Message Userpage: No workouts found.')
+          } else if (response.data.message) {
+            console.log(response.data.message)
+          } else {
+            const workoutsMap = new Map(response.map(oneWorkout => [oneWorkout._id, workout]))
+            setAllWorkouts(workoutsMap)
+          }
         } catch (error) {
           console.error('Error fetching exercises', error)
         }
       }
-      fetchExercises()
-    }, [])
-
-    useEffect(() => {
-      
-      const fetchWorkouts = async () => {
-
-        try {
-          const response = await workoutService.getAllWorkouts()
-
-          if (response.status === 204) {
-            console.log('No workouts found')
-          } else if (response.data.message) {
-            console.log(response.data.message)
-          } else {
-            setAllWorkouts(response)
-          }
-        } catch (error) {
-          console.error('Error fetching workouts', error)
-        }
-      }
       fetchWorkouts()
-    }, [view])
+    }, [view, userId])
 
     function handleDelete(oneWorkoutId) {
 
@@ -67,19 +50,16 @@ function UserPage() {
 
       workoutService.deleteWorkout(oneWorkoutId)
       .then(() => {
-
-        const deletedWorkoutIndex = allWorkouts.findIndex(workout => workout._id === oneWorkoutId)
         
-        if (deletedWorkoutIndex === -1) {
+        if (!allWorkouts.has(oneWorkoutId)) {
           toast.error('Workout not found.')
           return
         }
         
-        const updatedWorkouts = [...allWorkouts]
-        updatedWorkouts.splice(deletedWorkoutIndex, 1)
-
+        const updatedWorkouts = new Map(allWorkouts)
+        updatedWorkouts.delete(oneWorkoutId)
+        
         setAllWorkouts(updatedWorkouts)
-
         toast.success('Workout deleted succesfully!')
       })
       .catch((error) => {
@@ -99,7 +79,7 @@ function UserPage() {
 
     </aside>
     <main className="content">
-      {view === 'allWorkouts' && allWorkouts ? (
+      {view === 'allWorkouts' && allWorkouts.size > 0 ? (
         <table>
           <thead>
             <tr>
@@ -110,7 +90,7 @@ function UserPage() {
             </tr>
           </thead>
           <tbody>
-            {allWorkouts.map((oneWorkout) => {
+            {Array.from(allWorkouts.values()).map(oneWorkout => (
               <tr key={oneWorkout._id}>
                 <td>{oneWorkout.name}</td>
                 <td>
@@ -123,9 +103,9 @@ function UserPage() {
                     <HoverCardTrigger asChild><button>Info</button></HoverCardTrigger>
                     <HoverCardContent>
                       <p>Gets you there when applied with:</p>
-                      <ul>
+                      <ul className="list-disc pl-4">
                         {oneWorkout.usedWith && oneWorkout.usedWith.map((oneItem, index) => (
-                          <li key={index}>{oneItem}</li>
+                          <li key={index} className="text-sm m-2">{oneItem}</li>
                         ))}
                       </ul>
                     </HoverCardContent>
@@ -133,7 +113,7 @@ function UserPage() {
                 </td>
                 <td><button onClick={() => handleDelete(oneWorkout._id)}>delete</button></td>
               </tr>
-            })}
+            ))}
           </tbody>
         </table>
       ) : (
