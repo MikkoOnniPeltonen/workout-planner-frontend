@@ -38,6 +38,7 @@ function UserPage() {
               response.workouts.map(oneWorkout => [oneWorkout._id, oneWorkout])
             )
             setAllWorkouts(workoutsMap)
+            console.log(allWorkouts)
           }
         } catch (error) {
           console.error('Error fetching workouts', error)

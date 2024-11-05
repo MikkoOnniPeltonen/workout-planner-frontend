@@ -4,7 +4,7 @@ import workoutService from '../services/workouts.service'
 import musclegroupService from '../services/musclegroups.service'
 import { toast } from 'react-hot-toast'
 
-function Choose({ userData=[], isEditMode = false }) {
+function Choose({ userData= new Map(), isEditMode = false }) {
 
     const [editedWorkoutId, setEditedWorkoutId] = useState('')
     const [allMuscleGroups, setAllMuscleGroups] = useState([])
@@ -31,10 +31,10 @@ function Choose({ userData=[], isEditMode = false }) {
     }, [])
 
     const handleWorkoutSelect = (workoutName) => {
-        const selectedWorkout = userData.find(workout => workout.name === workoutName)
-        setEditedWorkoutId(selectedWorkout._id)
-        setWorkoutName(selectedWorkout.name)
-        setSelectedMuscleGroups(selectedWorkout.exercises.flatMap(ex => ex.belongsTo))
+        const selectedWorkout = Array.from(userData.values()).find(workout => workout.name === workoutName)
+        setEditedWorkoutId(selectedWorkout?._id)
+        setWorkoutName(selectedWorkout?.name || '')
+        setSelectedMuscleGroups(selectedWorkout?.exercises.flatMap(ex => ex.belongsTo) || [])
         setStep(4)
     }
 
