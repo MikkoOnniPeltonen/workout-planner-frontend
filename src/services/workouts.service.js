@@ -28,7 +28,7 @@ class WorkoutService{
           const response = await this.api.get('/workouts')
           return response.data
         } catch (error) {
-          console.error('Error fetching workouts', error)
+          console.error('Message from Service: Error fetching workouts', error)
           throw error
         }
       }
