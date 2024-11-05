@@ -89,7 +89,7 @@ function Choose({ userData=[], isEditMode = false }) {
                 await workoutService.updateWorkout(editedWorkoutId, workoutData)
             } else {
                 await workoutService.createWorkout(workoutData)
-                toast.success('Workout created succesfully!')
+                console.log('Workout created succesfully!')
             }
             setEditedWorkoutId('')
             setSelectedMuscleGroups([])
