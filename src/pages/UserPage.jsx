@@ -40,7 +40,7 @@ function UserPage() {
         }
       }
       fetchWorkouts()
-    }, [view, userId])
+    }, [view])
 
     function handleDelete(oneWorkoutId) {
 
