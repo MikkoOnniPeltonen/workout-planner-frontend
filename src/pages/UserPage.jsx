@@ -25,7 +25,7 @@ function UserPage() {
     useEffect(() => {
 
         exerciseService.getAllExercises().then((foundExercises) => {
-          setAllExercises(foundExercises)
+          setAllExercises(foundExercises.data)
         })
         .catch((err) => {
           console.error('Error fetching exercises', err)
@@ -40,7 +40,7 @@ function UserPage() {
 
       workoutService.getAllWorkouts()
       .then((foundWorkouts) => {
-        setAllWorkouts(foundWorkouts)
+        setAllWorkouts(foundWorkouts.data)
       })
       .catch((error) => {
         console.error('Error fetching workouts', error)
