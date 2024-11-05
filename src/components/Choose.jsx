@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Input } from "@/components/ui/input"
-import workoutService from '@/services/workouts.service'
-import musclegroupService from '@/services/musclegroups.service'
+import { Input } from "../components/ui/input"
+import workoutService from '../services/workouts.service'
+import musclegroupService from '../services/musclegroups.service'
 
 function Choose( userData={}, isEditMode = false ) {
 

@@ -1,9 +1,9 @@
-import LoadingSpinner from "@/components/LoadingSpinner"
+import LoadingSpinner from "../components/LoadingSpinner"
 
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import ExerciseCard from "@/components/ExerciseCard"
+import ExerciseCard from "../components/ExerciseCard"
 
 function AllExercisesPage() {
 

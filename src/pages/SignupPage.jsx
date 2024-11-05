@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import authService from '../services/auth.service.js'
-import { Card, CardHeader, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Card, CardHeader, CardContent } from '../components/ui/card'
+import { Button } from '../components/ui/button'
 
 
 function SignupPage() {

@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { AuthContext } from '../context/auth.context'
 import authService from "../services/auth.service"
 
-import { Card, CardHeader, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Card, CardHeader, CardContent } from '../components/ui/card'
+import { Button } from '../components/ui/button'
 
 function LoginPage() {
 

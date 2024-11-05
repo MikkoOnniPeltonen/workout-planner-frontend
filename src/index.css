@@ -320,3 +320,7 @@ tr.done {
   display: grid;
   justify-content: space-around;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

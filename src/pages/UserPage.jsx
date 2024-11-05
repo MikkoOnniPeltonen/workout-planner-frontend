@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react"
-import axios from 'axios'
-import Choose from "@/components/Choose"
-import Statistics from "@/components/Statistics"
-import { Card } from "@/components/ui/card"
+import Choose from "../components/Choose"
+import Statistics from "../components/Statistics"
+import { Card } from "../components/ui/card"
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card"
-import workoutService from '@/services/workouts.service'
-import exerciseService from "@/services/exercises.service"
-import toast from 'react-hot-toast'
-import { searchForWorkspaceRoot } from "vite"
+} from "../components/ui/hover-card"
+import workoutService from '../services/workouts.service'
+import exerciseService from "../services/exercises.service"
+import { toast } from 'react-hot-toast'
 
 function UserPage() {
 
