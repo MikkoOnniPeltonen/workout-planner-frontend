@@ -33,13 +33,11 @@ function UserPage() {
           if (response.message) {
             console.log('Message Userpage: No workouts found.', response.message)
             setAllWorkouts(new Map())
-          } else if (Array.isArray(response)) {
+          } else if (Array.isArray(response.workouts)) {
             const workoutsMap = new Map(
-              response.map(oneWorkout => [oneWorkout._id, oneWorkout])
+              response.workouts.map(oneWorkout => [oneWorkout._id, oneWorkout])
             )
-            
             setAllWorkouts(workoutsMap)
-          
           }
         } catch (error) {
           console.error('Error fetching workouts', error)
