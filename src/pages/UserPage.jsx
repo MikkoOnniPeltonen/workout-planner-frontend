@@ -25,7 +25,8 @@ function UserPage() {
     useEffect(() => {
 
         exerciseService.getAllExercises().then((foundExercises) => {
-          setAllExercises(foundExercises.data)
+          setAllExercises(foundExercises)
+          console.log(foundExercises)
         })
         .catch((err) => {
           console.error('Error fetching exercises', err)
