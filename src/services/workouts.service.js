@@ -21,7 +21,7 @@ class WorkoutService{
         return config;
       });
      
-      }
+    }
 
       async getAllWorkouts(){
         try {
@@ -62,9 +62,6 @@ class WorkoutService{
           throw error
         }
       }
-
-
-
 }
 
 

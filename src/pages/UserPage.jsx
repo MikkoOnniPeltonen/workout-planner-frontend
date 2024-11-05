@@ -41,7 +41,7 @@ function UserPage() {
 
       workoutService.getAllWorkouts()
       .then((foundWorkouts) => {
-        setAllWorkouts(foundWorkouts.data)
+        setAllWorkouts(foundWorkouts)
       })
       .catch((error) => {
         console.error('Error fetching workouts', error)
