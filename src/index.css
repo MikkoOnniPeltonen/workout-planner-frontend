@@ -183,6 +183,7 @@ tr.done {
   color: white;
   text-align: center;
   transition: opacity 0.6s ease-out;
+  font-size: xx-large;
 }
 
 /* In-view class in HOME PAGE */
@@ -194,6 +195,50 @@ tr.done {
 
 /* ALL EXERCISES VIEW */
 
+.header-container {
+  /* Basic positioning and spacing */
+  padding: 20px;
+  margin-bottom: 30px;
+  
+  /* Text enhancement */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  
+  /* Optional background for better contrast */
+  background: linear-gradient(to right, #ffffff, #f8f9fa);
+  
+  /* Optional container styling */
+  border-bottom: 2px solid #e9ecef;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the blue heading */
+.header-container h1.text-blue-600 {
+  color: #2563eb; /* Brighter blue */
+  text-shadow: 2px 2px 4px rgba(37, 99, 235, 0.2);
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+/* Style for the gray heading */
+.header-container h1.text-gray-800 {
+  color: #1f2937; /* Darker gray for better contrast */
+  text-shadow: 2px 2px 4px rgba(31, 41, 55, 0.2);
+  letter-spacing: 1px;
+}
+
+/* Hover effects for the linked heading */
+.header-container a:hover h1 {
+  transform: translateY(-2px);
+  text-shadow: 3px 3px 6px rgba(37, 99, 235, 0.3);
+}
+
+/* Optional: Add responsive adjustments */
+@media (max-width: 768px) {
+  .header-container h1 {
+    font-size: 2.5rem; /* Smaller text on mobile */
+  }
+}
+
 .card-title {
   font-family: "Roboto", sans-serif;
   font-size: 1.2rem;
@@ -203,7 +248,7 @@ tr.done {
 
 .cards-container {
   width: calc(20% - 16px);
-  margin: 5px;
+  margin: 20px;
 }
 
 .exercise-card {
