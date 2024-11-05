@@ -109,7 +109,7 @@ function Choose({ userData=[], isEditMode = false }) {
 
     return (
         <div>
-            <table>
+            <table className='table-workout'>
                 <thead>
                     <tr>
                         <th scope='col'>Exercise Plan</th>
