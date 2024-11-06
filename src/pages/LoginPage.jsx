@@ -38,7 +38,6 @@ function LoginPage() {
 
         try {
             const token = await authService.login(logInformation)
-            console.log('token as data: ', token.data)
             console.log('token as auth: ',token.authToken)
             localStorage.setItem("token", token.authToken)
             authenticateUser()
