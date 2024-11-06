@@ -4,6 +4,7 @@
 
 import { createContext, useState, useEffect } from "react";
 import authService from '../services/auth.service'
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext()
 
@@ -17,8 +18,10 @@ function AuthContextProvider(props) {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
-    function authenticateUser() {
+    const navigate = useNavigate()
 
+    function authenticateUser() {
+        setIsLoading(true)
         // 1. get the token from localstorage
     
         const token = localStorage.getItem('token')
@@ -26,34 +29,39 @@ function AuthContextProvider(props) {
         // 2. send the token to the verify route
     
         if(token) {
-            authService.verify()
+            authService.verify(token)
             .then((userInformation) => {
 
                 setLoggedInUser(userInformation.data)
-                setIsLoading(false)
                 setIsLoggedIn(true)
             })
             .catch((error) => {
                 console.error('Verification failed', error)
-                setLoggedInUser(null)
-                setIsLoggedIn(false)
+                handleAuthError(error)
             })
             .finally(() => {
                 setIsLoading(false)
             })
         }
         else {
-            setIsLoggedIn(false)
-            setLoggedInUser(null)
-            setIsLoading(false)
+            logOutUser()
         }
+    }
+
+    function handleAuthError(error) {
+        console.log('Error in auth in context: ', error)
+        setLoggedInUser(null)
+        setIsLoggedIn(false)
+        navigate('/login')
     }
 
 
     function logOutUser() {
 
         localStorage.removeItem('token')
-            authenticateUser()
+        setLoggedInUser(null)
+        setIsLoggedIn(false)
+        setIsLoading(false)
     }
 
     useEffect(()=> {

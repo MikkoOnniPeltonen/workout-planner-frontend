@@ -5,10 +5,13 @@ import { Navigate } from 'react-router-dom'
 
 function IsAnon(props) {
 
-    const {isLoggedIn} = useContext(AuthContext)
+    const { isLoggedIn, isLoading } = useContext(AuthContext)
+
+    if (isLoading) {
+        return <div>Loading...</div>
+    }
 
     if (isLoggedIn) {
-
         return <Navigate to='/user' />
     }
     else {
