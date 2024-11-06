@@ -33,9 +33,9 @@ function UserPage() {
           if (response.message) {
             console.log('Message Userpage: No workouts found.', response.message)
             setAllWorkouts(new Map())
-          } else if (Array.isArray(response.workouts)) {
+          } else if (Array.isArray(response)) {
             const workoutsMap = new Map(
-              response.workouts.map(oneWorkout => [oneWorkout._id, oneWorkout])
+              response.map(oneWorkout => [oneWorkout._id, oneWorkout])
             )
             setAllWorkouts(workoutsMap)
             console.log(allWorkouts)
