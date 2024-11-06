@@ -38,7 +38,9 @@ function LoginPage() {
 
         try {
             const token = await authService.login(logInformation)
-            localStorage.setItem("token", token.data.authToken)
+            console.log('token as data: ', token.data)
+            console.log('token as auth: ',token.authToken)
+            localStorage.setItem("token", token.authToken)
             authenticateUser()
             navigate('/user')
         
