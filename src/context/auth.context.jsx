@@ -32,7 +32,7 @@ function AuthContextProvider(props) {
             authService.verify(token)
             .then((userInformation) => {
 
-                setLoggedInUser(userInformation)
+                setLoggedInUser(userInformation.payload)
                 setIsLoggedIn(true)
             })
             .catch((error) => {
