@@ -119,7 +119,7 @@ function UserPage() {
                       <ul className="list-disc pl-4">
                         {oneWorkout.usedWith && Array.isArray(oneWorkout.usedWith) ? (
                           oneWorkout.usedWith.map((oneItem, index) => (
-                            <li key={index} className="text-sm m-2">{oneItem}</li>
+                            <li key={index} className="text-sm m-2">{oneItem + ' '}</li>
                           ))
                         ) : (
                           <li>No additional information</li>
