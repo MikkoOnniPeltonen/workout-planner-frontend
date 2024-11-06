@@ -29,10 +29,10 @@ function AuthContextProvider(props) {
         // 2. send the token to the verify route
     
         if(token) {
-            authService.verify(token)
+            authService.verify()
             .then((userInformation) => {
 
-                setLoggedInUser(userInformation)
+                setLoggedInUser(userInformation.data)
                 setIsLoggedIn(true)
             })
             .catch((error) => {
