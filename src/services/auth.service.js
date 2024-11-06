@@ -54,9 +54,13 @@ class AuthService{
         }
     }
 
-    async verify(){
+    async verify(token){
         try {
-            const response = await this.api.get('/verify')
+            const response = await this.api.get('/verify', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             return response.data
         } catch (error) {
             console.error('Error during verification ', error)
