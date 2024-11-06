@@ -139,8 +139,12 @@ function UserPage() {
         </Card>
       ))}
     {view === 'create' && <Choose />}
-    {view === 'edit' && <Choose userData={allWorkouts} isEditMode = {true} />}
-    {view === 'statistics' && <Statistics creatorId={creatorId} />}
+    {view === 'edit' && (allWorkouts.size > 0 ? (
+      <Choose userData={allWorkouts} isEditMode = {true} />
+      ) : (
+        <LoadingSpinner />
+      ))}
+    {view === 'statistics' && <Statistics workouts={allWorkouts} />}
    </main>
 
     </div>

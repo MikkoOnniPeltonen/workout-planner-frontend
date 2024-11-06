@@ -23,6 +23,18 @@ class WorkoutService{
      
     }
 
+    /* CRUD OPERATIONS FOR WORKOUTS */
+    
+    async getOneWorkout(workoutId) {
+
+      try {
+        const response = await this.api.get(`/by-musclegroup/${workoutId}`)
+        return response.data
+      } catch (error) {
+        console.error('Message from Service: Error fetching one workout', error)
+        throw error
+      }
+    }
       async getAllWorkouts(){
         try {
           const response = await this.api.get('/workouts')
