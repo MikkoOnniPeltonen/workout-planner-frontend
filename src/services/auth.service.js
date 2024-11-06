@@ -61,6 +61,8 @@ class AuthService{
                     Authorization: `Bearer ${token}`
                 }
             })
+            console.log('plain response: ', response)
+            console.log('data response: ',response.data)
             return response.data
         } catch (error) {
             console.error('Error during verification ', error)
