@@ -25,14 +25,14 @@ function AuthContextProvider(props) {
         // 1. get the token from localstorage
     
         const token = localStorage.getItem('token')
-            
+        console.log(token)
         // 2. send the token to the verify route
     
         if(token) {
             authService.verify(token)
             .then((userInformation) => {
 
-                setLoggedInUser(userInformation.data)
+                setLoggedInUser(userInformation)
                 setIsLoggedIn(true)
             })
             .catch((error) => {
