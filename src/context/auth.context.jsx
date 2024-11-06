@@ -29,7 +29,7 @@ function AuthContextProvider(props) {
         // 2. send the token to the verify route
     
         if(token) {
-            authService.verify(token)
+            authService.verify()
             .then((userInformation) => {
                 console.log(userInformation)
                 setLoggedInUser(userInformation.data.payload)
