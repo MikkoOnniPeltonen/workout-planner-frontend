@@ -8,18 +8,35 @@ import {
   HoverCardTrigger,
 } from "../components/ui/hover-card"
 import workoutService from '../services/workouts.service'
+import userService from "../services/users.service"
 import { toast } from 'react-hot-toast'
 import LoadingSpinner from "../components/LoadingSpinner"
 
 function UserPage() {
 
     const [allWorkouts, setAllWorkouts] = useState(new Map())
+    const [currentUser, setCurrentUser] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [view, setView] = useState('allWorkouts')
 
     const handleSelectView = (selectedView) => {
       setView(selectedView)
     }
+
+    useEffect(() => {
+
+      const fetchUser = async () => {
+        try {
+          const response = await userService.getUser()
+          setCurrentUser(response)
+
+        } catch (error) {
+          console.error('Error fetching user name', error)
+        }
+      }
+      fetchUser()
+    }, [])
+
 
     useEffect(() => {
 
@@ -81,6 +98,7 @@ function UserPage() {
   return (
     <div className="app-container">
     <aside className="sidebar">
+      <h6>{currentUser + "' " + "Page"}</h6>
       <button onClick={() => handleSelectView('allWorkouts')} className="sidebar-button">All Workouts</button>
       <button onClick={() => handleSelectView('create')} className="sidebar-button">Create Workout</button>
       <button onClick={() => handleSelectView('edit')} className="sidebar-button">Edit Workout</button>

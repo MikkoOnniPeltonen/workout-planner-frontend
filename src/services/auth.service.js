@@ -35,16 +35,33 @@ class AuthService{
 
     }
 
-    signup(requestBody){
-        return this.api.post('/auth/signup', requestBody)
+    async signup(requestBody){
+        try {
+           const response = await this.api.post('/auth/signup', requestBody)
+           return response.data  
+        } catch (error) {
+            console.error('Error during sign up', error)
+        }
     }
 
-    login(requestBody) {
-        return this.api.post('/auth/login', requestBody)
+    async login(requestBody) {
+        try {
+            const response = await this.api.post('/auth/login', requestBody)
+            return response.data
+        } catch (error) {
+            console.error('Error during login: ', error)
+            throw error
+        }
     }
 
-    verify(){
-        return this.api.get('/auth/verify')
+    async verify(){
+        try {
+            const response = await this.api.get('/verify')
+            return response.data
+        } catch (error) {
+            console.error('Error during verification ', error)
+            throw error
+        }
     }
 }
 
