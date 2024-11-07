@@ -28,6 +28,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: lemonchiffon;
 }
 
 h1 {
@@ -98,6 +99,7 @@ button:focus-visible {
 
 
 /*  USER PAGE  */
+
 tr.disabled {
   opacity: 0.3;
   pointer-events: none;
@@ -445,17 +447,13 @@ tr.done {
 
 /* Navbar theme */
 
-.light {
-  background-color: #efeded;
-}
-.dark {
-  background-color: #18191a;
-}
 .Navbar.light {
   background-color: #ffffff;
+  color: #252526;
 }
 .Navbar.dark {
   background-color: #252526;
+  color:#f8f9fa ;
 }
 
 .Navbar {
