@@ -59,6 +59,7 @@ class AuthService{
     async verify(){
         try {
             const response = await this.api.get('/verify')
+            console.log('Verify response: ', response)
             return response.data
         } catch (error) {
             console.error('Error during verification ', error)

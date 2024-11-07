@@ -31,8 +31,8 @@ function AuthContextProvider(props) {
         if(token) {
             authService.verify()
             .then((userInformation) => {
-                console.log(userInformation)
-                setLoggedInUser(userInformation.data.payload)
+                console.log('user information in context: ', userInformation)
+                setLoggedInUser(userInformation.data)
                 setIsLoggedIn(true)
             })
             .catch((error) => {

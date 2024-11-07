@@ -38,9 +38,8 @@ function LoginPage() {
 
         try {
             const token = await authService.login(logInformation)
-            console.log('token as auth: ',token.authToken)
             console.log('token as plain: ',token)
-            localStorage.setItem("token", token.authToken)
+            localStorage.setItem("token", token)
             authenticateUser()
             navigate('/user')
         
