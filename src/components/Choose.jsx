@@ -4,12 +4,12 @@ import workoutService from '../services/workouts.service'
 import musclegroupService from '../services/musclegroups.service'
 import { toast } from 'react-hot-toast'
 
-function Choose({ userData= new Map(), isEditMode = false }) {
+function Choose({ userData } ) {
 
     const [editedWorkoutId, setEditedWorkoutId] = useState('')
     const [allMuscleGroups, setAllMuscleGroups] = useState([])
     const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([])
-    const [workoutName, setWorkoutName] = useState(isEditMode ? userData.name : '')
+    const [workoutName, setWorkoutName] = useState('')
     const [step, setStep] = useState(1)
 
     useEffect(() => {
@@ -118,7 +118,7 @@ function Choose({ userData= new Map(), isEditMode = false }) {
                             {isEditMode ? (
                                 <select value={workoutName} onChange={(e) => handleWorkoutSelect(e.target.value)}>
                                     <option value="">Select Workout</option>
-                                    {userData.map(workout => (
+                                    {[...userData.values()].map(workout => (
                                         <option key={workout._id}>{workout.name}</option>
                                     ))}
                                 </select>

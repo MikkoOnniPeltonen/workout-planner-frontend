@@ -17,7 +17,7 @@ function UserPage() {
     const [allWorkouts, setAllWorkouts] = useState(new Map())
     const [currentUser, setCurrentUser] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-    const [view, setView] = useState('allWorkouts')
+    const [view, setView] = useState('create')
 
     const handleSelectView = (selectedView) => {
       setView(selectedView)
@@ -158,7 +158,7 @@ function UserPage() {
       ))}
     {view === 'create' && <Choose />}
     {view === 'edit' && (allWorkouts.size > 0 ? (
-      <Choose userData={allWorkouts} isEditMode = {true} />
+      <Choose userData={allWorkouts} />
       ) : (
         <LoadingSpinner />
       ))}
