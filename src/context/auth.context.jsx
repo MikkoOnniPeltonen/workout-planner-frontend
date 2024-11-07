@@ -20,7 +20,7 @@ function AuthContextProvider(props) {
 
     const navigate = useNavigate()
 
-    function authenticateUser() {
+    const authenticateUser = async () => {
         setIsLoading(true)
         // 1. get the token from localstorage
     
@@ -28,44 +28,29 @@ function AuthContextProvider(props) {
         console.log(token)
         // 2. send the token to the verify route
     
-        if(token) {
-            authService.verify()
-            .then((response) => {
-                console.log('user information in context: ', response)
-                if (response.data) {
-                    setLoggedInUser(response.data)
-                    setIsLoggedIn(true)
-                } else {
-                    handleAuthError('Invalid token')
-                }
-            })
-            .catch((error) => {
-                console.error('Verification failed', error)
-                handleAuthError(error)
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
-        }
-        else {
-            logOutUser()
+        try {
+
+            const response = await authService.verify(token)
+            if (response.data) {
+                setLoggedInUser(response.data)
+                setIsLoggedIn(true)
+            } else {
+                await handleAuthError('Invalid token')
+            }
+        } catch (error) {
+            console.error('Verification failed', error)
+            await handleAuthError(error)
+        } finally {
+            setIsLoading(false)
+        
         }
     }
 
-    function handleAuthError(error) {
+    const handleAuthError = async (error) => {
         console.log('Error in auth in context: ', error)
         setLoggedInUser(null)
         setIsLoggedIn(false)
         navigate('/login')
-    }
-
-
-    function logOutUser() {
-
-        localStorage.removeItem('token')
-        setLoggedInUser(null)
-        setIsLoggedIn(false)
-        setIsLoading(false)
     }
 
     useEffect(()=> {
@@ -73,7 +58,7 @@ function AuthContextProvider(props) {
     }, [])
 
     return(
-        <AuthContext.Provider value={{loggedInUser, isLoggedIn, isLoading, authenticateUser, logOutUser}}>
+        <AuthContext.Provider value={{ loggedInUser, isLoggedIn, isLoading, authenticateUser }}>
             {props.children}
         </AuthContext.Provider>
     )

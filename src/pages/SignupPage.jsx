@@ -15,19 +15,16 @@ function SignupPage() {
     
     const navigate = useNavigate()
 
-    function handleSubmit(e) {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
-        let newUser = formData
-        console.log(newUser)
-        
-        authService.signup(newUser)
-        .then((createdUser) => {
+        try {
+            const createdUser = await authService.signup(formData)
+            console.log('User created succesfully', createdUser)
             navigate('/login')
-        })
-        .catch((error) => {
-            console.error(error)
-        })
+        } catch (error) {
+            console.error('Signup failed:', error)
+        }
     }
 
     const handleChange = (e) => {

@@ -15,15 +15,16 @@ function LoginPage() {
     const [passwordError, setPasswordError] = useState('')
 
     const [isLoading, setIsLoading] = useState(false)
-    const navigate = useNavigate()
 
+    const navigate = useNavigate()
     const { authenticateUser } = useContext(AuthContext)
 
 
-    async function handleSubmit(e) {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
-        setIsLoading(true)
+        setEmailError('')
+        setPasswordError('')
 
         if(!email) setEmailError('Email required, please enter your email.')
         if(!password) setPasswordError('Password required, please enter a password.')
@@ -31,11 +32,13 @@ function LoginPage() {
 
         if (!email || !password) {
             console.error('Email and password required.')
+            setIsLoading(false)
             return
         }
 
-        let logInformation = {email, password}
+        const logInformation = { email, password }
 
+        setIsLoading(true)
         try {
             const response = await authService.login(logInformation)
             console.log('token as plain: ',response.token)
