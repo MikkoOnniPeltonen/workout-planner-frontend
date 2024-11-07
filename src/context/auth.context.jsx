@@ -25,12 +25,12 @@ function AuthContextProvider(props) {
         // 1. get the token from localstorage
     
         const token = localStorage.getItem('token')
-        console.log(token)
+        console.log('token in context: ', token)
         // 2. send the token to the verify route
     
         try {
 
-            const response = await authService.verify(token)
+            const response = await authService.verify()
             if (response.data) {
                 setLoggedInUser(response.data)
                 setIsLoggedIn(true)
