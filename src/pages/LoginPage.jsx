@@ -38,10 +38,11 @@ function LoginPage() {
 
         try {
             const response = await authService.login(logInformation)
-            console.log('token as plain: ',token)
+            console.log('token as plain: ',response.token)
             const authToken = response.token
             localStorage.setItem("token", authToken)
             authenticateUser()
+            console.log('token in the local storage: ', authToken)
             navigate('/user')
         
         } catch (error) {

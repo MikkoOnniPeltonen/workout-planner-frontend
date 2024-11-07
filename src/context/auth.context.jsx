@@ -30,10 +30,14 @@ function AuthContextProvider(props) {
     
         if(token) {
             authService.verify()
-            .then((userInformation) => {
-                console.log('user information in context: ', userInformation)
-                setLoggedInUser(userInformation)
-                setIsLoggedIn(true)
+            .then((response) => {
+                console.log('user information in context: ', response)
+                if (response.data) {
+                    setLoggedInUser(response.data)
+                    setIsLoggedIn(true)
+                } else {
+                    handleAuthError('Invalid token')
+                }
             })
             .catch((error) => {
                 console.error('Verification failed', error)
