@@ -9,13 +9,15 @@ import {
 } from "../components/ui/hover-card"
 import workoutService from '../services/workouts.service'
 import userService from "../services/users.service"
+import musclegroupService from "../services/musclegroups.service"
 import { toast } from 'react-hot-toast'
 import LoadingSpinner from "../components/LoadingSpinner"
 
 function UserPage() {
 
-    const [allWorkouts, setAllWorkouts] = useState(new Map())
-    const [currentUser, setCurrentUser] = useState('')
+    const [allWorkouts, setAllWorkouts] = useState([])
+    const [muscleGroups, setMuscleGroups] = useState([])
+    const [currentUser, setCurrentUser] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [view, setView] = useState('create')
 
@@ -25,16 +27,25 @@ function UserPage() {
 
     useEffect(() => {
 
-      const fetchUser = async () => {
+      const fetchInitialData = async () => {
         try {
-          const response = await userService.getUser()
-          setCurrentUser(response)
-
+          setIsLoading(true)
+          const [workoutsData, muscleGroupsData, userData] = await Promise.all([
+            workoutService.getAllWorkouts(),
+            musclegroupService.getAllmusclegroups(),
+            userService.getUser()
+          ])
+          setAllWorkouts(workoutsData)
+          setMuscleGroups(muscleGroupsData)
+          setCurrentUser(userData)
         } catch (error) {
-          console.error('Error fetching user name', error)
+          toast.error('Error loading data')
+          console.error(error)
+        } finally {
+          setIsLoading(false)
         }
       }
-      fetchUser()
+      fetchInitialData()
     }, [])
 
 
@@ -49,12 +60,9 @@ function UserPage() {
           
           if (response.message) {
             console.log('Message Userpage: No workouts found.', response.message)
-            setAllWorkouts(new Map())
+            setAllWorkouts([])
           } else if (Array.isArray(response)) {
-            const workoutsMap = new Map(
-              response.map(oneWorkout => [oneWorkout._id, oneWorkout])
-            )
-            setAllWorkouts(workoutsMap)
+            setAllWorkouts(response)
             console.log(allWorkouts)
           }
         } catch (error) {
@@ -68,37 +76,28 @@ function UserPage() {
       fetchWorkouts()
     }, [view])
 
-    function handleDelete(oneWorkoutId) {
+    const handleDelete = async (oneWorkoutId) => {
 
       if (!window.confirm('Are you sure you want to delete this workout?')) {
         return
       }
 
-      workoutService.deleteWorkout(oneWorkoutId)
-      .then(() => {
-        
-        if (!allWorkouts.has(oneWorkoutId)) {
-          toast.error('Workout not found.')
-          return
-        }
-        
-        const updatedWorkouts = new Map(allWorkouts)
-        updatedWorkouts.delete(oneWorkoutId)
-        
+      try {
+        await workoutService.deleteWorkout(oneWorkoutId)
+        const updatedWorkouts = allWorkouts.filter(workout => workout._id !== oneWorkoutId)
         setAllWorkouts(updatedWorkouts)
         toast.success('Workout deleted succesfully!')
-      })
-      .catch((error) => {
+      } catch (error) {
         const errorMessage = error.response?.data?.errorMessage || 'Error in deleting workout.'
         toast.error(errorMessage)
         console.error('Error in deleting workout.', error)
-      })
+      }
     }
 
   return (
     <div className="app-container">
     <aside className="sidebar">
-      <h6>{currentUser + "' " + "Page"}</h6>
+      <h6>{currentUser + "'s " + "Page"}</h6>
       <button onClick={() => handleSelectView('allWorkouts')} className="sidebar-button">All Workouts</button>
       <button onClick={() => handleSelectView('create')} className="sidebar-button">Create Workout</button>
       <button onClick={() => handleSelectView('edit')} className="sidebar-button">Edit Workout</button>
@@ -106,7 +105,7 @@ function UserPage() {
 
     </aside>
     <main className="content">
-      {isLoading ? (<LoadingSpinner />) : (view === 'allWorkouts' && allWorkouts.size > 0 ? (
+      {isLoading ? (<LoadingSpinner />) : (view === 'allWorkouts' && allWorkouts ? (
         <table>
           <thead>
             <tr>
@@ -117,7 +116,7 @@ function UserPage() {
             </tr>
           </thead>
           <tbody>
-            {Array.from(allWorkouts.values()).map(oneWorkout => (
+            {allWorkouts.map(oneWorkout => (
               <tr key={oneWorkout._id}>
                 <td>{oneWorkout.name}</td>
                 <td>
@@ -134,10 +133,10 @@ function UserPage() {
                     <HoverCardTrigger asChild><button>Info</button></HoverCardTrigger>
                     <HoverCardContent>
                       <p>Gets you there when applied with:</p>
-                      <ul className="list-disc pl-4">
+                      <ul className="flex flex-col gap-4 pl-4">
                         {oneWorkout.usedWith && Array.isArray(oneWorkout.usedWith) ? (
                           oneWorkout.usedWith.map((oneItem, index) => (
-                            <li key={index} className="text-sm m-2">{oneItem + ' '}</li>
+                            <li key={index} className="text-sm">{`${oneItem}`}</li>
                           ))
                         ) : (
                           <li>No additional information</li>
@@ -156,9 +155,9 @@ function UserPage() {
           <p>No workouts available. Create one to get started!</p>
         </Card>
       ))}
-    {view === 'create' && <Choose />}
-    {view === 'edit' && (allWorkouts.size > 0 ? (
-      <Choose userData={allWorkouts} />
+    {view === 'create' && <Choose muscleGroups={muscleGroups} />}
+    {view === 'edit' && (allWorkouts.length > 0 ? (
+      <Choose workouts={allWorkouts} muscleGroups={muscleGroups} />
       ) : (
         <LoadingSpinner />
       ))}

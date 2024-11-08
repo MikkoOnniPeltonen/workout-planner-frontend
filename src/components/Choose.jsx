@@ -4,38 +4,29 @@ import workoutService from '../services/workouts.service'
 import musclegroupService from '../services/musclegroups.service'
 import { toast } from 'react-hot-toast'
 
-function Choose({ userData } ) {
+function Choose({ userData }, { muscleGroups } ) {
 
     const [editedWorkoutId, setEditedWorkoutId] = useState('')
     const [allMuscleGroups, setAllMuscleGroups] = useState([])
     const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([])
     const [workoutName, setWorkoutName] = useState('')
     const [step, setStep] = useState(1)
+    const isEditMode = Boolean(workoutToEdit)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
-    useEffect(() => {
-
-        const fetchMuscleGroups = async () => {
-            try {
-                const muscleGroups = await musclegroupService.getAllmusclegroups()
-                if (Array.isArray(muscleGroups)) {
-                    setAllMuscleGroups(muscleGroups)
-                } else {
-                    console.error('Fetched muscle groups is not an array.', muscleGroups)
-                }
-                
-            } catch (error) {
-                console.error('Error fetching muscle groups in component', error)
-            }
-        }
-        fetchMuscleGroups()
-    }, [])
+    const initializeEditMode = (workout) => {
+        setEditedWorkoutId(workout._id)
+        setWorkoutName(workout.name)
+        setSelectedMuscleGroups(workout.exercises.flatMap(ex => ex.belongsTo))
+        setStep(4)
+    }
 
     const handleWorkoutSelect = (workoutName) => {
-        const selectedWorkout = Array.from(userData.values()).find(workout => workout.name === workoutName)
-        setEditedWorkoutId(selectedWorkout?._id)
-        setWorkoutName(selectedWorkout?.name || '')
-        setSelectedMuscleGroups(selectedWorkout?.exercises.flatMap(ex => ex.belongsTo) || [])
-        setStep(4)
+        const selectedWorkout = userData.find(workout => workout.name === workoutName)
+
+        if (selectedWorkout) {
+            initializeEditMode(selectedWorkout)
+        }
     }
 
     const handleSelection = (muscleGroupName) => {
@@ -73,12 +64,13 @@ function Choose({ userData } ) {
     const handleSubmit = async () => {
 
         try {
-
+            setIsSubmitting(true)
             console.log('Submitting exercises', selectedMuscleGroups)
             console.log(workoutName)
 
 
-            const selectedGroupIds = allMuscleGroups.filter((group) => selectedMuscleGroups.includes(group.name)).map((group) => group._id)
+            const selectedGroupIds = allMuscleGroups.filter((group) => selectedMuscleGroups
+            .includes(group.name)).map((group) => group._id)
 
             const workoutData = {
                 name: workoutName,
@@ -94,17 +86,23 @@ function Choose({ userData } ) {
                 console.log('Workout created succesfully!')
                 toast.success('Workout created succesfully!')
             }
-            setEditedWorkoutId('')
-            setSelectedMuscleGroups([])
-            setWorkoutName('')
-            setStep(1)
+            
+            resetForm()
         }
         catch (error) {
             console.error('Error submitting workouts', error)
             toast.error('Something went wrong.')
+        } finally {
+            setIsSubmitting(false)
         }
     }
 
+    const resetForm = () => {
+        setEditedWorkoutId('')
+        setSelectedMuscleGroups([])
+        setWorkoutName('')
+        setStep(1)
+    }
 
 
     return (
@@ -118,8 +116,8 @@ function Choose({ userData } ) {
                             {isEditMode ? (
                                 <select value={workoutName} onChange={(e) => handleWorkoutSelect(e.target.value)}>
                                     <option value="">Select Workout</option>
-                                    {[...userData.values()].map(workout => (
-                                        <option key={workout._id}>{workout.name}</option>
+                                    {userData.map(workout => (
+                                        <option key={workout._id} value={workout.name}>{workout.name}</option>
                                     ))}
                                 </select>
                             ) : (
@@ -182,7 +180,7 @@ function Choose({ userData } ) {
                             Set
                         </td>
                         <td>
-                            <button type='submit' className='btn btn-outline-success btn-lg' disabled={step !== 4} onClick={handleSubmit}>Go!</button>
+                            <button type='submit' className='btn btn-outline-success btn-lg' disabled={step !== 4} onClick={handleSubmit}>{isSubmitting ? 'Saving': 'Go!'}</button>
                         </td>
                     </tr>
                 </tbody>
