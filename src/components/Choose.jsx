@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react'
 import { Input } from "../components/ui/input"
 import workoutService from '../services/workouts.service'
-import musclegroupService from '../services/musclegroups.service'
 import { toast } from 'react-hot-toast'
 
-function Choose({ userData }, { muscleGroups } ) {
+function Choose({ workouts, muscleGroups, isEditMode=false }) {
 
     const [editedWorkoutId, setEditedWorkoutId] = useState('')
-    const [allMuscleGroups, setAllMuscleGroups] = useState([])
+    const [allMuscleGroups, setAllMuscleGroups] = useState(muscleGroups)
+    const [allWorkouts, setAllWorkouts] = useState(workouts)
     const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([])
     const [workoutName, setWorkoutName] = useState('')
     const [step, setStep] = useState(1)
-    const isEditMode = Boolean(workoutToEdit)
     const [isSubmitting, setIsSubmitting] = useState(false)
+
+
+    useEffect(() => {
+        setAllWorkouts(workouts)
+    }, [workouts])
 
     const initializeEditMode = (workout) => {
         setEditedWorkoutId(workout._id)
@@ -22,7 +26,8 @@ function Choose({ userData }, { muscleGroups } ) {
     }
 
     const handleWorkoutSelect = (workoutName) => {
-        const selectedWorkout = userData.find(workout => workout.name === workoutName)
+
+        const selectedWorkout = allWorkouts.find(workout => workout.name === workoutName)
 
         if (selectedWorkout) {
             initializeEditMode(selectedWorkout)
@@ -72,6 +77,7 @@ function Choose({ userData }, { muscleGroups } ) {
             const selectedGroupIds = allMuscleGroups.filter((group) => selectedMuscleGroups
             .includes(group.name)).map((group) => group._id)
 
+            console.log('exercises so far: ', selectedGroupIds)
             const workoutData = {
                 name: workoutName,
                 exercises: selectedGroupIds
@@ -116,7 +122,7 @@ function Choose({ userData }, { muscleGroups } ) {
                             {isEditMode ? (
                                 <select value={workoutName} onChange={(e) => handleWorkoutSelect(e.target.value)}>
                                     <option value="">Select Workout</option>
-                                    {userData.map(workout => (
+                                    {workouts.map(workout => (
                                         <option key={workout._id} value={workout.name}>{workout.name}</option>
                                     ))}
                                 </select>

@@ -17,7 +17,7 @@ function UserPage() {
 
     const [allWorkouts, setAllWorkouts] = useState([])
     const [muscleGroups, setMuscleGroups] = useState([])
-    const [currentUser, setCurrentUser] = useState(null)
+    const [currentUser, setCurrentUser] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [view, setView] = useState('create')
 
@@ -35,9 +35,13 @@ function UserPage() {
             musclegroupService.getAllmusclegroups(),
             userService.getUser()
           ])
-          setAllWorkouts(workoutsData)
-          setMuscleGroups(muscleGroupsData)
-          setCurrentUser(userData)
+          setAllWorkouts(workoutsData.data)
+          setMuscleGroups(muscleGroupsData.data)
+          setCurrentUser(userData.data)
+
+          console.log('workoust data: ', allWorkouts)
+          console.log('musclegroup data: ', muscleGroups)
+          console.log('current user data: ', currentUser)
         } catch (error) {
           toast.error('Error loading data')
           console.error(error)
@@ -157,7 +161,7 @@ function UserPage() {
       ))}
     {view === 'create' && <Choose muscleGroups={muscleGroups} />}
     {view === 'edit' && (allWorkouts.length > 0 ? (
-      <Choose workouts={allWorkouts} muscleGroups={muscleGroups} />
+      <Choose workouts={allWorkouts} muscleGroups={muscleGroups} isEditMode={true} />
       ) : (
         <LoadingSpinner />
       ))}

@@ -6,10 +6,10 @@ import workoutService from '../services/workouts.service'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-function Statistics({ workouts= new Map() }) {
+function Statistics({ workouts }) {
 
     const [searchTerm, setSearchTerm] = useState('')
-    const [filteredWorkouts, setFilteredWorkouts] = useState(new Map())
+    const [filteredWorkouts, setFilteredWorkouts] = useState([])
     const [selectedWorkout, setSelectedWorkout] = useState(null)
     const [data, setData] = useState({
         labels: [],
@@ -25,14 +25,13 @@ function Statistics({ workouts= new Map() }) {
 
     useEffect(() => {
 
-        if (!(workouts instanceof Map)) {
-            console.error('Invalid data format: "workouts" should be a Map')
+        if (!(Array.isArray(workouts))) {
+            console.error('Invalid data format: "workouts" should be an array')
             return
         }
 
-        const filtered = new Map(
-            Array.from(workouts).filter(([_id, workout]) => 
-            workout?.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+        const filtered = workouts.filter(workout => 
+            workout?.name?.toLowerCase().includes(searchTerm.toLowerCase())
         )
 
         setFilteredWorkouts(filtered)
@@ -67,7 +66,7 @@ function Statistics({ workouts= new Map() }) {
             return
         }
 
-        const muscleGroups = new Map()
+        const muscleGroups = {}
 
         workout.exercises.forEach((exercise) => {
             if (!exercise.belongsTo) return
@@ -77,22 +76,19 @@ function Statistics({ workouts= new Map() }) {
             exercise.belongsTo.forEach((muscleGroup) => {
                 const muscleGroupName = muscleGroup?.name
                 if (muscleGroupName && !seenMuscleGroups.has(muscleGroupName)) {
-                    muscleGroups.set(
-                        muscleGroupName,
-                        (muscleGroups.get(muscleGroupName) || 0) + 1
-                    )
+                    muscleGroups[muscleGroupName] = (muscleGroups[muscleGroupName] || 0) + 1
                     seenMuscleGroups.add(muscleGroupName)
                 }
             })
         })
 
-        if (muscleGroups.size > 0) {
+        if (Object.keys(muscleGroups).length > 0) {
 
             setData({
-                labels: Array.from(muscleGroups.keys()),
+                labels: Object.keys(muscleGroups),
                 datasets: [{
                     label: 'Muscle Group Distribution',
-                    data: Array.from(muscleGroups.values()),
+                    data: Object.values(muscleGroups),
                     backgroundColor: [
                         '#FF6384', '#36A2EB', '#FFCE56',
                         '#4BC0C0', '#9966FF', '#FF9F40', '#8DD1E1'
@@ -109,9 +105,9 @@ function Statistics({ workouts= new Map() }) {
     <div>
       <h2>Workout Muscle Group Statistics</h2>
       <input type="text" placeholder='Search workout' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-      {filteredWorkouts.size > 0 ? (
+      {filteredWorkouts.legnth > 0 ? (
             <ul>
-                {Array.from(filteredWorkouts.entries()).map(([_id, workout]) => (
+                {filteredWorkouts.map((workout) => (
                     <li key={_id} onClick={() => setSelectedWorkout(workout)}>
                         {workout.names}
                     </li>

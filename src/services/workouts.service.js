@@ -28,22 +28,23 @@ class WorkoutService{
     async getOneWorkout(workoutId) {
 
       try {
-        const response = await this.api.get(`/by-musclegroup/${workoutId}`)
+        const response = await this.api.get(`/workouts/by-musclegroup/${workoutId}`)
         return response.data
       } catch (error) {
         console.error('Message from Service: Error fetching one workout', error)
         throw error
       }
     }
-      async getAllWorkouts(){
-        try {
-          const response = await this.api.get('/workouts')
+
+    async getAllWorkouts(){
+      try {
+        const response = await this.api.get('/workouts')
           return response.data
-        } catch (error) {
-          console.error('Message from Service: Error fetching workouts', error)
-          throw error
-        }
+      } catch (error) {
+        console.error('Message from Service: Error fetching workouts', error)
+        throw error
       }
+    }
 
       async createWorkout(createdWorkout) {
         try {
