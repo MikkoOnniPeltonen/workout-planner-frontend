@@ -6,8 +6,8 @@ import { toast } from 'react-hot-toast'
 function Choose({ workouts, muscleGroups, isEditMode=false }) {
 
     const [editedWorkoutId, setEditedWorkoutId] = useState('')
-    const [allMuscleGroups, setAllMuscleGroups] = useState(muscleGroups)
-    const [allWorkouts, setAllWorkouts] = useState(workouts)
+    const [allMuscleGroups, setAllMuscleGroups] = useState([])
+    const [allWorkouts, setAllWorkouts] = useState([])
     const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([])
     const [workoutName, setWorkoutName] = useState('')
     const [step, setStep] = useState(1)
@@ -16,14 +16,14 @@ function Choose({ workouts, muscleGroups, isEditMode=false }) {
 
     useEffect(() => {
         if (muscleGroups) {
-            setAllMuscleGroups(muscleGroups)
+            setAllMuscleGroups([...muscleGroups])
         }
     }, [muscleGroups])
 
 
     useEffect(() => {
         if (workouts) {
-            setAllWorkouts(workouts)
+            setAllWorkouts([...workouts])
         }
     }, [workouts])
 
