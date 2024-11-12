@@ -35,9 +35,9 @@ function UserPage() {
             musclegroupService.getAllmusclegroups(),
             userService.getUser()
           ])
-          setAllWorkouts(workoutsData.data)
-          setMuscleGroups(muscleGroupsData.data)
-          setCurrentUser(userData.data)
+          setAllWorkouts(workoutsData)
+          setMuscleGroups(muscleGroupsData)
+          setCurrentUser(userData)
 
           console.log('workouts data: ', allWorkouts)
           console.log('musclegroup data: ', muscleGroups)
