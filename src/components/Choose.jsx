@@ -15,13 +15,23 @@ function Choose({ workouts, muscleGroups, isEditMode=false }) {
 
 
     useEffect(() => {
-        setAllWorkouts(workouts)
+        if (muscleGroups) {
+            setAllMuscleGroups(muscleGroups)
+        }
+    }, [muscleGroups])
+
+
+    useEffect(() => {
+        if (workouts) {
+            setAllWorkouts(workouts)
+        }
     }, [workouts])
 
     const initializeEditMode = (workout) => {
         setEditedWorkoutId(workout._id)
         setWorkoutName(workout.name)
-        setSelectedMuscleGroups(workout.exercises.flatMap(ex => ex.belongsTo))
+        setSelectedMuscleGroups(workout.exercises.map(ex => ex.belongsTo))
+        console.log('EDIT MUSCLEGROUP: ', selectedMuscleGroups)
         setStep(4)
     }
 

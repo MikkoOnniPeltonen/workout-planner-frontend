@@ -39,7 +39,7 @@ function UserPage() {
           setMuscleGroups(muscleGroupsData.data)
           setCurrentUser(userData.data)
 
-          console.log('workoust data: ', allWorkouts)
+          console.log('workouts data: ', allWorkouts)
           console.log('musclegroup data: ', muscleGroups)
           console.log('current user data: ', currentUser)
         } catch (error) {
