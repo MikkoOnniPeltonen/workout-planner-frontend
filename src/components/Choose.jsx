@@ -3,10 +3,11 @@ import { Input } from "../components/ui/input"
 import workoutService from '../services/workouts.service'
 import { toast } from 'react-hot-toast'
 
-function Choose({ workouts, muscleGroups, isEditMode=false }) {
+function Choose({ workouts, muscleGroups, allExercises, isEditMode=false }) {
 
     const [editedWorkoutId, setEditedWorkoutId] = useState('')
     const [allMuscleGroups, setAllMuscleGroups] = useState([])
+    const [allExercisesList, setAllExercisesList] = useState([])
     const [allWorkouts, setAllWorkouts] = useState([])
     const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([])
     const [workoutName, setWorkoutName] = useState('')
@@ -20,6 +21,12 @@ function Choose({ workouts, muscleGroups, isEditMode=false }) {
         }
     }, [muscleGroups])
 
+    useEffect(() => {
+
+        if (allExercises) {
+            setAllExercisesList([...allExercises])
+        }
+    }, [allExercises])
 
     useEffect(() => {
         if (workouts) {
@@ -86,11 +93,16 @@ function Choose({ workouts, muscleGroups, isEditMode=false }) {
 
             const selectedGroupIds = allMuscleGroups.filter((group) => selectedMuscleGroups
             .includes(group.name)).map((group) => group._id)
+            
+            console.log('Ids of musclegroups so far: ', selectedGroupIds)
 
-            console.log('exercises so far: ', selectedGroupIds)
+            const filteredExercises = allExercisesList.filter((oneExercise) => selectedGroupIds.includes(oneExercise.belongsTo))
+            
+            console.log('Filtered exercises: ', filteredExercises)
+            
             const workoutData = {
                 name: workoutName,
-                exercises: selectedGroupIds
+                exercises: filteredExercises
             }
 
             if (isEditMode) {

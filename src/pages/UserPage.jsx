@@ -10,6 +10,7 @@ import {
 import workoutService from '../services/workouts.service'
 import userService from "../services/users.service"
 import musclegroupService from "../services/musclegroups.service"
+import exerciseService from "../services/exercises.service"
 import { toast } from 'react-hot-toast'
 import LoadingSpinner from "../components/LoadingSpinner"
 
@@ -17,6 +18,7 @@ function UserPage() {
 
     const [allWorkouts, setAllWorkouts] = useState([])
     const [muscleGroups, setMuscleGroups] = useState([])
+    const [allExercises, setAllExercises] = useState([])
     const [currentUser, setCurrentUser] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [view, setView] = useState('create')
@@ -40,13 +42,15 @@ function UserPage() {
       const fetchInitialData = async () => {
         try {
           setIsLoading(true)
-          const [workoutsData, muscleGroupsData, userData] = await Promise.all([
+          const [workoutsData, muscleGroupsData, exerciseData, userData] = await Promise.all([
             workoutService.getAllWorkouts(),
             musclegroupService.getAllmusclegroups(),
+            exerciseService.getAllExercises(),
             userService.getUser()
           ])
           setAllWorkouts(workoutsData)
           setMuscleGroups(muscleGroupsData)
+          setAllExercises(exerciseData)
           setCurrentUser(userData.name)
 
           console.log('workouts data: ', allWorkouts)
@@ -163,9 +167,9 @@ function UserPage() {
           <p>No workouts available. Create one to get started!</p>
         </Card>
       ))}
-    {view === 'create' && <Choose muscleGroups={muscleGroups} />}
+    {view === 'create' && <Choose muscleGroups={muscleGroups} allExercises={allExercises} />}
     {view === 'edit' && (allWorkouts.length > 0 ? (
-      <Choose workouts={allWorkouts} muscleGroups={muscleGroups} isEditMode={true} />
+      <Choose workouts={allWorkouts} muscleGroups={muscleGroups} allExercises={allExercises} isEditMode={true} />
       ) : (
         <LoadingSpinner />
       ))}
