@@ -24,6 +24,16 @@ function UserPage() {
     const handleSelectView = (selectedView) => {
       setView(selectedView)
     }
+    
+    const togglePin = (id) => {
+      const updatedData = allWorkouts.map((workout) => workout._id === id ? { ...workout, isPinned: !workout.isPinned } : workout )
+      
+      setAllWorkouts(updatedData)
+    }
+
+    const sortedData = [...allWorkouts].sort((a, b) => {
+      return b.isPinned - a.isPinned || a.name.localeCompare(b.name)
+    })
 
     useEffect(() => {
 
@@ -69,7 +79,6 @@ function UserPage() {
         }
       }
       
-      
       fetchWorkouts()
     }, [view])
 
@@ -110,11 +119,12 @@ function UserPage() {
               <th>Exercises</th>
               <th>Extras</th>
               <th>Actions</th>
+              <th>Pin</th>
             </tr>
           </thead>
           <tbody>
-            {allWorkouts.map(oneWorkout => (
-              <tr key={oneWorkout._id}>
+            {sortedData.map(oneWorkout => (
+              <tr key={oneWorkout._id} style={{ backgroundColor: oneWorkout.isPinned ? '#f0f8ff' : 'white'}}>
                 <td>{oneWorkout.name}</td>
                 <td>
                   {oneWorkout.exercises && Array.isArray(oneWorkout.exercises) ? (
@@ -143,6 +153,7 @@ function UserPage() {
                   </HoverCard>
                 </td>
                 <td><button onClick={() => handleDelete(oneWorkout._id)}>delete</button></td>
+                <td><button onClick={() => togglePin(oneWorkout._id)}>{oneWorkout.isPinned ? 'Unpin' : 'Pin'}</button></td>
               </tr>
             ))}
           </tbody>
