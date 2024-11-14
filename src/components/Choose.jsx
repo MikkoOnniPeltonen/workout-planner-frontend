@@ -96,8 +96,8 @@ function Choose({ workouts, muscleGroups, allExercises, isEditMode=false }) {
             
             console.log('Ids of musclegroups so far: ', selectedGroupIds)
 
-            const filteredExercises = allExercisesList.filter((oneExercise) => selectedGroupIds.includes(oneExercise.belongsTo))
-            
+            const filteredExercises = allExercisesList.filter((oneExercise) => selectedGroupIds.some(id => oneExercise.belongsTo.includes(id)))
+              
             console.log('Filtered exercises: ', filteredExercises)
             
             const workoutData = {
@@ -144,7 +144,7 @@ function Choose({ workouts, muscleGroups, allExercises, isEditMode=false }) {
                             {isEditMode ? (
                                 <select value={workoutName} onChange={(e) => handleWorkoutSelect(e.target.value)}>
                                     <option value="">Select Workout</option>
-                                    {workouts.map(workout => (
+                                    {allWorkouts.map(workout => (
                                         <option key={workout._id} value={workout.name}>{workout.name}</option>
                                     ))}
                                 </select>
