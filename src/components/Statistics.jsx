@@ -2,14 +2,13 @@
 import { Pie } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { useState, useEffect } from 'react'
-import workoutService from '../services/workouts.service'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-function Statistics({ workouts }) {
+function Statistics({ workouts, muscleGroups }) {
 
-    const [searchTerm, setSearchTerm] = useState('')
-    const [filteredWorkouts, setFilteredWorkouts] = useState([])
+    console.log('musclegroups from props: ', muscleGroups)
+    console.log('workouts from props: ', workouts)
     const [selectedWorkout, setSelectedWorkout] = useState(null)
     const [data, setData] = useState({
         labels: [],
@@ -23,99 +22,76 @@ function Statistics({ workouts }) {
         }]
     })
 
-    useEffect(() => {
+    const handleWorkoutSelect = (e) => {
+        const workoutId = e.target.value
+        const selected = workouts.find(workout => workout._id === workoutId)
+        setSelectedWorkout(selected || null)
+    }
 
-        if (!(Array.isArray(workouts))) {
-            console.error('Invalid data format: "workouts" should be an array')
-            return
-        }
+    const getMuscleGroupNameById = (id) => {
+        const muscleGroup = muscleGroups.find(group => group._id === id)
+        return muscleGroup ? muscleGroup.name : null
+    }
 
-        const filtered = workouts.filter(workout => 
-            workout?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-
-        setFilteredWorkouts(filtered)
-    }, [workouts, searchTerm])
 
     useEffect(() => {
+
         if (!selectedWorkout) return
 
-        const fetchWorkoutDetails = async () => {
-            try {
-                const response = await workoutService.getOneWorkout(selectedWorkout._id)
-                if (!response.ok) {
-                    console.error('Failed to fetch workout details. Front end')
-                    return
-                }
+        const updateMuscleGroups = (workout) => {
+            if (!workout || !Array.isArray(workout.exercises)) {
+                console.error('Invalid workout data or exercisese are missing.')
+                return
+            }
 
-                const workoutData = response
-                updateMuscleGroups(workoutData)
-            } catch (error) {
-                console.error('Error fetching workout details', error)
+            const muscleGroupsCount = {}
+
+            workout.exercises.forEach((exercise) => {
+                if (!exercise.belongsTo) return
+
+                const seenMuscleGroups = new Set()
+
+                exercise.belongsTo.forEach((muscleGroupId) => {
+                    const muscleGroupName = getMuscleGroupNameById(muscleGroupId)
+                    if (muscleGroupName && !seenMuscleGroups.has(muscleGroupName)) {
+                        muscleGroupsCount[muscleGroupName] = (muscleGroupsCount[muscleGroupName] || 0) + 1
+                        seenMuscleGroups.add(muscleGroupName)
+                    }
+                })
+            })
+
+            if (Object.keys(muscleGroupsCount).length > 0) {
+                setData({
+                    labels: Object.keys(muscleGroupsCount),
+                    datasets: [{
+                        label: 'Muscle Group Distribution',
+                        data: Object.values(muscleGroupsCount),
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56',
+                            '#4BC0C0', '#9966FF', '#FF9F40', '#8DD1E1'
+                        ],
+                    }]
+                })
+            } else {
+                console.warn('No valid muscle group data to update chart.')
             }
         }
 
-        fetchWorkoutDetails()
+        updateMuscleGroups(selectedWorkout)
+        console.log('Data for pie chart: ', data)
     }, [selectedWorkout])
-
-
-    const updateMuscleGroups = (workout) => {
-        
-        if (!workout || !Array.isArray(workout.exercises)) {
-            console.error('Invalid workout data or exercises are missing.')
-            return
-        }
-
-        const muscleGroups = {}
-
-        workout.exercises.forEach((exercise) => {
-            if (!exercise.belongsTo) return
-
-            const seenMuscleGroups = new Set()
-
-            exercise.belongsTo.forEach((muscleGroup) => {
-                const muscleGroupName = muscleGroup?.name
-                if (muscleGroupName && !seenMuscleGroups.has(muscleGroupName)) {
-                    muscleGroups[muscleGroupName] = (muscleGroups[muscleGroupName] || 0) + 1
-                    seenMuscleGroups.add(muscleGroupName)
-                }
-            })
-        })
-
-        if (Object.keys(muscleGroups).length > 0) {
-
-            setData({
-                labels: Object.keys(muscleGroups),
-                datasets: [{
-                    label: 'Muscle Group Distribution',
-                    data: Object.values(muscleGroups),
-                    backgroundColor: [
-                        '#FF6384', '#36A2EB', '#FFCE56',
-                        '#4BC0C0', '#9966FF', '#FF9F40', '#8DD1E1'
-                    ],
-                }]
-            })
-        } else {
-            console.warn('No valid muscle group ata to update chart.')
-        }
-
-    }
     
   return (
     <div>
       <h2>Workout Muscle Group Statistics</h2>
-      <input type="text" placeholder='Search workout' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-      {filteredWorkouts.legnth > 0 ? (
-            <ul>
-                {filteredWorkouts.map((workout) => (
-                    <li key={_id} onClick={() => setSelectedWorkout(workout)}>
-                        {workout.names}
-                    </li>
-                ))}
-            </ul>
-      ) : (
-        <p>No workouts found.</p>
-      )}
+      <label htmlFor='workoutSelect'>Select a Workout:</label>
+      <select id='workoutSelect' onChange={handleWorkoutSelect} value={selectedWorkout ? selectedWorkout._id : ''}>
+        <option value="">-- Select a Workout --</option>
+        {workouts.map((workout) => (
+            <option key={workout._id} value={workout._id}>{workout.name}</option>
+        ))}
+      </select>
+
       {selectedWorkout ? (
         <div>
             <h3>{selectedWorkout.name}</h3>

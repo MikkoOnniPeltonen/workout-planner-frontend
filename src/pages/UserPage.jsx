@@ -61,14 +61,7 @@ function UserPage() {
           setIsLoading(true)
 
           const response = await workoutService.getAllWorkouts()
-          
-          if (response.message) {
-            console.log('Message Userpage: No workouts found.', response.message)
-            setAllWorkouts([])
-          } else if (Array.isArray(response)) {
-            setAllWorkouts(response)
-            console.log(allWorkouts)
-          }
+          setAllWorkouts(response)
         } catch (error) {
           console.error('Error fetching workouts', error)
         } finally {
@@ -165,7 +158,7 @@ function UserPage() {
       ) : (
         <LoadingSpinner />
       ))}
-    {view === 'statistics' && <Statistics workouts={allWorkouts} />}
+    {view === 'statistics' && <Statistics workouts={allWorkouts} muscleGroups={muscleGroups} />}
    </main>
 
     </div>
