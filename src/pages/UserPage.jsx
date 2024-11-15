@@ -13,6 +13,7 @@ import musclegroupService from "../services/musclegroups.service"
 import exerciseService from "../services/exercises.service"
 import { toast } from 'react-hot-toast'
 import LoadingSpinner from "../components/LoadingSpinner"
+import Modal from "../components/Modal"
 
 function UserPage() {
 
@@ -22,6 +23,9 @@ function UserPage() {
     const [currentUser, setCurrentUser] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [view, setView] = useState('create')
+
+    const [modalOpen, setModalOpen] = useState(false)
+    const [selectedExercise, setSelectedExercise] = useState(null)
 
     const handleSelectView = (selectedView) => {
       setView(selectedView)
@@ -104,6 +108,16 @@ function UserPage() {
       }
     }
 
+    const openModal = (exercise) => {
+      setSelectedExercise(exercise)
+      setModalOpen(true)
+    }
+
+    const closeModal = () => {
+      setModalOpen(false)
+      setSelectedExercise(null)
+    }
+
   return (
     <div className="app-container">
     <aside className="sidebar">
@@ -132,8 +146,8 @@ function UserPage() {
                 <td>{oneWorkout.name}</td>
                 <td>
                   {oneWorkout.exercises && Array.isArray(oneWorkout.exercises) ? (
-                    oneWorkout.exercises.map((oneExercise) => (
-                    <div key={oneExercise._id}>{oneExercise.name}</div>
+                    oneWorkout.exercises.slice(0,3).map((oneExercise) => (
+                    <div key={oneExercise._id}><button onClick={() => openModal(oneExercise)}>Show</button></div>
                     ))
                   ) : (
                     <div>No exercises</div>
@@ -145,8 +159,8 @@ function UserPage() {
                     <HoverCardContent>
                       <p>Gets you there when applied with:</p>
                       <ul className="flex flex-col gap-4 pl-4">
-                        {oneWorkout.usedWith && Array.isArray(oneWorkout.usedWith) ? (
-                          oneWorkout.usedWith.map((oneItem, index) => (
+                        {oneWorkout.exercises.usedWith && Array.isArray(oneWorkout.exercises.usedWith) ? (
+                          oneWorkout.exercises.usedWith.map((oneItem, index) => (
                             <li key={index} className="text-sm">{`${oneItem}`}</li>
                           ))
                         ) : (
@@ -175,7 +189,7 @@ function UserPage() {
       ))}
     {view === 'statistics' && <Statistics workouts={allWorkouts} muscleGroups={muscleGroups} />}
    </main>
-
+      <Modal isOpen={modalOpen} closeModal={closeModal} videoUrl={selectedExercise ? `https://www.youtube.com/embed/${selectedExercise.youtubeId}` : ''} exerciseName={selectedExercise ? selectedExercise.name : ''} />
     </div>
   )
 }

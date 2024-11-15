@@ -9,6 +9,9 @@ function Statistics({ workouts, muscleGroups }) {
 
     console.log('musclegroups from props: ', muscleGroups)
     console.log('workouts from props: ', workouts)
+
+    const [allMuscleGroups, setAllMuscleGroups] = useState([])
+    const [allWorkouts, setAllWorkouts] = useState([])
     const [selectedWorkout, setSelectedWorkout] = useState(null)
     const [data, setData] = useState({
         labels: [],
@@ -24,15 +27,22 @@ function Statistics({ workouts, muscleGroups }) {
 
     const handleWorkoutSelect = (e) => {
         const workoutId = e.target.value
-        const selected = workouts.find(workout => workout._id === workoutId)
+        const selected = allWorkouts.find(workout => workout._id === workoutId)
         setSelectedWorkout(selected || null)
     }
 
     const getMuscleGroupNameById = (id) => {
-        const muscleGroup = muscleGroups.find(group => group._id === id)
+        const muscleGroup = allMuscleGroups.find(group => group._id === id)
         return muscleGroup ? muscleGroup.name : null
     }
 
+    useEffect(() => {
+        const workoutsFromProps = [...workouts]
+        setAllWorkouts(workoutsFromProps)
+
+        const muscleGroupsFromProps = [...muscleGroups]
+        setAllMuscleGroups(muscleGroupsFromProps)
+    }, [])
 
     useEffect(() => {
 
@@ -87,7 +97,7 @@ function Statistics({ workouts, muscleGroups }) {
       <label htmlFor='workoutSelect'>Select a Workout:</label>
       <select id='workoutSelect' onChange={handleWorkoutSelect} value={selectedWorkout ? selectedWorkout._id : ''}>
         <option value="">-- Select a Workout --</option>
-        {workouts.map((workout) => (
+        {allWorkouts.map((workout) => (
             <option key={workout._id} value={workout._id}>{workout.name}</option>
         ))}
       </select>
